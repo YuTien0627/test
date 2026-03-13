@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登入 — 奇美醫院品質改善整合資源平台</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet" />
+  <script src="qcc-auth.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #143352;
+      --teal:   #0b7285;
+      --teal2:  #0e9a8a;
+      --gold:   #c78c2a;
+      --snow:   #f0f6fa;
+      --fog:    #d4e3ed;
+      --mist:   #8fa8ba;
+      --ink:    #0f1f2e;
+      --white:  #ffffff;
+      --rose:   #c94f6d;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--navy);
+      display: flex;
+      align-items: stretch;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(11,114,133,.35) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 80% at 80% 70%, rgba(14,154,138,.2) 0%, transparent 60%);
+    }
+
+    /* Grid lines decoration */
+    .grid-deco {
+      position: absolute; inset: 0; opacity: .06;
+      background-image:
+        linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .left-content { position: relative; z-index: 1; }
+
+    .brand-mark {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+    .brand-mark img { height: 52px; width: auto; filter: brightness(0) invert(1); opacity: .9; }
+    .brand-name { color: rgba(255,255,255,.85); font-size: .78rem; font-weight: 300; letter-spacing: .14em; text-transform: uppercase; }
+
+    .left-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .left-headline em { font-style: italic; color: rgba(163,230,242,.85); }
+
+    .left-sub {
+      font-size: .95rem; color: rgba(255,255,255,.55);
+      line-height: 1.8; max-width: 380px; margin-bottom: 3rem;
+    }
+
+    .feature-list { display: flex; flex-direction: column; gap: .75rem; }
+    .feature-item {
+      display: flex; align-items: center; gap: .8rem;
+      font-size: .84rem; color: rgba(255,255,255,.6);
+    }
+    .feature-dot {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(255,255,255,.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; flex-shrink: 0;
+    }
+
+    /* Role preview pills */
+    .role-pills {
+      display: flex; flex-wrap: wrap; gap: .5rem;
+      margin-top: 3rem;
+    }
+    .role-pill {
+      display: flex; align-items: center; gap: .4rem;
+      padding: .35rem .85rem; border-radius: 99px;
+      font-size: .73rem; font-weight: 600; letter-spacing: .04em;
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.65);
+      background: rgba(255,255,255,.06);
+    }
+
+    /* ── RIGHT PANEL (Login form) ── */
+    .right-panel {
+      width: min(440px, 100%);
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .login-top {
+      display: flex; flex-direction: column; gap: .4rem;
+      margin-bottom: 2.4rem;
+    }
+    .login-eyebrow {
+      font-size: .72rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--teal); font-weight: 600;
+    }
+    .login-title {
+      font-size: 1.6rem; font-weight: 900; color: var(--navy); line-height: 1.2;
+    }
+    .login-sub { font-size: .85rem; color: var(--mist); margin-top: .25rem; }
+
+    /* Form */
+    .form-group { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.1rem; }
+    .form-label { font-size: .78rem; font-weight: 600; color: var(--navy); letter-spacing: .03em; }
+    .input-wrap { position: relative; }
+    .input-icon {
+      position: absolute; left: .9rem; top: 50%; transform: translateY(-50%);
+      font-size: 1rem; pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      padding: .75rem 1rem .75rem 2.6rem;
+      border: 1.5px solid var(--fog);
+      border-radius: 10px;
+      font-size: .9rem;
+      font-family: 'Noto Sans TC', sans-serif;
+      color: var(--ink);
+      background: var(--snow);
+      transition: border-color .18s, box-shadow .18s, background .18s;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--teal);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(11,114,133,.12);
+    }
+    .form-input.error { border-color: var(--rose); box-shadow: 0 0 0 3px rgba(201,79,109,.1); }
+
+    .pwd-toggle {
+      position: absolute; right: .85rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      font-size: .9rem; color: var(--mist); padding: .2rem;
+      transition: color .18s;
+    }
+    .pwd-toggle:hover { color: var(--teal); }
+
+    /* Quick-login demo accounts */
+    .demo-accounts {
+      background: var(--snow);
+      border: 1px solid var(--fog);
+      border-radius: 10px;
+      padding: .9rem 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .demo-label {
+      font-size: .72rem; font-weight: 700; color: var(--mist);
+      letter-spacing: .08em; text-transform: uppercase;
+      margin-bottom: .6rem;
+    }
+    .demo-list { display: flex; flex-direction: column; gap: .3rem; }
+    .demo-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .4rem .65rem; border-radius: 7px;
+      background: var(--white); border: 1px solid var(--fog);
+      cursor: pointer; font-size: .78rem;
+      font-family: 'Noto Sans TC', sans-serif;
+      color: var(--ink); transition: border-color .15s, background .15s;
+      text-align: left;
+    }
+    .demo-btn:hover { border-color: var(--teal); background: var(--white); }
+    .demo-btn .demo-info { display: flex; align-items: center; gap: .5rem; }
+    .demo-btn .demo-cred { font-family: monospace; font-size: .73rem; color: var(--mist); }
+
+    /* Role badge inline */
+    .rbadge {
+      display: inline-flex; align-items: center; gap: .25rem;
+      font-size: .65rem; font-weight: 700; padding: .15rem .5rem;
+      border-radius: 99px;
+    }
+    .rb-admin  { background: #fde8ec; color: var(--rose); }
+    .rb-editor { background: #fef3dc; color: var(--gold); }
+    .rb-viewer { background: #e3f5f7; color: var(--teal); }
+    .rb-guest  { background: #f0f6fa; color: var(--mist); border: 1px solid var(--fog); }
+
+    .btn-login {
+      width: 100%;
+      padding: .85rem;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+      color: var(--white); border: none;
+      border-radius: 10px; font-size: .95rem;
+      font-weight: 700; font-family: 'Noto Sans TC', sans-serif;
+      cursor: pointer; letter-spacing: .04em;
+      transition: opacity .2s, transform .18s, box-shadow .2s;
+      box-shadow: 0 6px 20px rgba(11,114,133,.3);
+    }
+    .btn-login:hover  { opacity: .92; transform: translateY(-1px); box-shadow: 0 10px 28px rgba(11,114,133,.35); }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    /* Error message */
+    .error-msg {
+      display: none; align-items: center; gap: .5rem;
+      background: #fde8ec; color: var(--rose);
+      font-size: .82rem; font-weight: 500;
+      padding: .65rem .9rem; border-radius: 8px;
+      border: 1px solid rgba(201,79,109,.2);
+      margin-bottom: 1.2rem;
+    }
+    .error-msg.show { display: flex; }
+
+    /* Spinner */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .btn-inner { display: flex; align-items: center; justify-content: center; gap: .6rem; }
+
+    /* Footer */
+    .login-footer {
+      margin-top: 2rem; padding-top: 1.2rem;
+      border-top: 1px solid var(--fog);
+      text-align: center;
+      font-size: .73rem; color: var(--mist); line-height: 1.7;
+    }
+    .login-footer a { color: var(--teal); text-decoration: none; }
+    .login-footer a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      body { flex-direction: column; overflow: auto; }
+      .left-panel { padding: 2.5rem 2rem; min-height: 220px; }
+      .left-headline { font-size: 1.6rem; }
+      .left-sub, .feature-list { display: none; }
+      .role-pills { margin-top: 1rem; }
+      .right-panel { width: 100%; padding: 2rem 1.5rem; }
+      .brand-mark { margin-bottom: 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .left-panel { padding: 1.8rem 1.2rem; }
+      .right-panel { padding: 1.5rem 1.2rem; }
+      .demo-accounts { display: none; }
+    }
+
+    /* Animation */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    .login-top, .form-group, .demo-accounts, .btn-login, .login-footer {
+      animation: fadeUp .45s cubic-bezier(.4,0,.2,1) both;
+    }
+    .login-top { animation-delay: .05s; }
+    .form-group:nth-child(1) { animation-delay: .10s; }
+    .form-group:nth-child(2) { animation-delay: .15s; }
+    .demo-accounts { animation-delay: .20s; }
+    .btn-login { animation-delay: .25s; }
+    .login-footer { animation-delay: .30s; }
+  </style>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="grid-deco"></div>
+  <div class="left-content">
+    <div class="brand-mark">
+      <img src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png" alt="品管部LOGO" />
+      <span class="brand-name">Chi Mei Medical Center</span>
+    </div>
+
+    <h1 class="left-headline">
+      品質改善<br><em>整合資源平台</em>
+    </h1>
+
+    <p class="left-sub">
+      從概念到實踐，整合品管工具、書面格式與學習資源，
+      協助全院同仁有系統地推動品質改善。
+    </p>
+
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-dot">🎁</div>工具大禮包：品管工具與手法總覽</div>
+      <div class="feature-item"><div class="feature-dot">📝</div>書面格式：問題解決型 ＆ 課題達成型引導</div>
+      <div class="feature-item"><div class="feature-dot">🛠️</div>參考資料：歷年課程影音與外部案例</div>
+      <div class="feature-item"><div class="feature-dot">🎯</div>小試身手：互動測驗即時回饋</div>
+    </div>
+
+    <div class="role-pills">
+      <div class="role-pill">👑 管理員</div>
+      <div class="role-pill">✏️ 編輯者</div>
+      <div class="role-pill">👤 一般同仁</div>
+      <div class="role-pill">👁️ 訪客</div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+
+  <div class="login-top">
+    <div class="login-eyebrow">Member Login</div>
+    <div class="login-title">歡迎回來</div>
+    <div class="login-sub">請登入以存取品質改善學習資源</div>
+  </div>
+
+  <div class="error-msg" id="errorMsg">
+    ⚠️ <span id="errorText">帳號或密碼錯誤，請再試一次。</span>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="username">帳號</label>
+    <div class="input-wrap">
+      <span class="input-icon">👤</span>
+      <input class="form-input" type="text" id="username"
+        placeholder="輸入您的帳號" autocomplete="username" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="password">密碼</label>
+    <div class="input-wrap">
+      <span class="input-icon">🔒</span>
+      <input class="form-input" type="password" id="password"
+        placeholder="輸入您的密碼" autocomplete="current-password" />
+      <button class="pwd-toggle" type="button" id="pwdToggle" title="顯示/隱藏密碼">👁</button>
+    </div>
+  </div>
+
+  <!-- Demo accounts -->
+  <div class="demo-accounts">
+    <div class="demo-label">示範帳號 — 快速登入</div>
+    <div class="demo-list">
+      <button class="demo-btn" onclick="quickLogin('admin','admin123')">
+        <div class="demo-info">
+          <span>👑</span>
+          <span>系統管理員</span>
+          <span class="rbadge rb-admin">管理員</span>
+        </div>
+        <span class="demo-cred">admin / admin123</span>
+      </button>
+      <button class="demo-btn" onclick="quickLogin('editor1','edit123')">
+        <div class="demo-info">
+          <span>✏️</span>
+          <span>王品質（品質管理部）</span>
+          <span class="rbadge rb-editor">編輯者</span>
+        </div>
+        <span class="demo-cred">editor1 / edit123</span>
+      </button>
+      <button class="demo-btn" onclick="quickLogin('staff1','staff123')">
+        <div class="demo-info">
+          <span>👤</span>
+          <span>李護理師（護理部）</span>
+          <span class="rbadge rb-viewer">一般同仁</span>
+        </div>
+        <span class="demo-cred">staff1 / staff123</span>
+      </button>
+      <button class="demo-btn" onclick="quickLogin('guest','guest000')">
+        <div class="demo-info">
+          <span>👁️</span>
+          <span>訪客</span>
+          <span class="rbadge rb-guest">訪客</span>
+        </div>
+        <span class="demo-cred">guest / guest000</span>
+      </button>
+    </div>
+  </div>
+
+  <button class="btn-login" id="loginBtn" onclick="handleLogin()">
+    <div class="btn-inner">
+      <div class="spinner" id="spinner"></div>
+      <span id="loginBtnText">登入平台</span>
+    </div>
+  </button>
+
+  <div class="login-footer">
+    <div>© 2026 奇美醫院品質管理部 版權所有</div>
+    <div>本系統僅供院內教育與品質改善使用</div>
+    <div>意見回饋：<a href="mailto:cqm@mail.chimei.org.tw">cqm@mail.chimei.org.tw</a></div>
+  </div>
+</div>
+
+<script>
+  // If already logged in, redirect
+  if (QCC_AUTH.getUser()) {
+    window.location.href = 'index.html';
+  }
+
+  const usernameEl = document.getElementById('username');
+  const passwordEl = document.getElementById('password');
+  const errorMsg   = document.getElementById('errorMsg');
+  const errorText  = document.getElementById('errorText');
+  const loginBtn   = document.getElementById('loginBtn');
+  const spinner    = document.getElementById('spinner');
+  const btnText    = document.getElementById('loginBtnText');
+
+  function showError(msg) {
+    errorText.textContent = msg;
+    errorMsg.classList.add('show');
+    usernameEl.classList.add('error');
+    passwordEl.classList.add('error');
+  }
+  function clearError() {
+    errorMsg.classList.remove('show');
+    usernameEl.classList.remove('error');
+    passwordEl.classList.remove('error');
+  }
+
+  function setLoading(on) {
+    loginBtn.disabled = on;
+    spinner.style.display = on ? 'block' : 'none';
+    btnText.textContent = on ? '驗證中…' : '登入平台';
+  }
+
+  function handleLogin() {
+    clearError();
+    const u = usernameEl.value.trim();
+    const p = passwordEl.value;
+    if (!u || !p) { showError('請輸入帳號與密碼。'); return; }
+
+    setLoading(true);
+    setTimeout(() => {
+      const user = QCC_AUTH.login(u, p);
+      setLoading(false);
+      if (user) {
+        window.location.href = 'index.html';
+      } else {
+        showError('帳號或密碼錯誤，請再試一次。');
+        passwordEl.value = '';
+        passwordEl.focus();
+      }
+    }, 600);
+  }
+
+  function quickLogin(u, p) {
+    usernameEl.value = u;
+    passwordEl.value = p;
+    clearError();
+    handleLogin();
+  }
+
+  // Password toggle
+  document.getElementById('pwdToggle').addEventListener('click', function() {
+    const isText = passwordEl.type === 'text';
+    passwordEl.type = isText ? 'password' : 'text';
+    this.textContent = isText ? '👁' : '🙈';
+  });
+
+  // Enter key submit
+  [usernameEl, passwordEl].forEach(el => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+  });
+</script>
+</body>
+</html>

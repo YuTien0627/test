@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>奇美醫院品質改善整合資源平台</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet" />
+  <script src="qcc-auth.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:    #143352; --teal:   #0b7285; --teal2: #0e9a8a;
+      --teal-lt: #e3f5f7; --teal-md:#b2e4ea;
+      --gold:    #c78c2a; --gold-lt:#fef3dc;
+      --rose:    #c94f6d; --slate:  #4a6278;
+      --mist:    #8fa8ba; --fog:    #d4e3ed;
+      --snow:    #f0f6fa; --white:  #ffffff; --ink: #0f1f2e;
+      --shadow:  0 4px 20px rgba(15,31,46,.09);
+      --shadow-lg:0 12px 48px rgba(15,31,46,.13);
+      --radius: 14px; --radius-lg:22px;
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--snow); color:var(--ink); min-height:100vh; -webkit-font-smoothing:antialiased; }
+
+    /* ANNOUNCEMENT */
+    #ann-bar { background:linear-gradient(90deg,#0e3a5e 0%,#1a5276 100%); color:rgba(255,255,255,.85); font-size:.78rem; padding:.5rem 1.25rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    #ann-bar .mwrap { flex:1; overflow:hidden; position:relative; height:1.2rem; }
+    #ann-bar .mtrack { position:absolute; white-space:nowrap; animation:marquee 30s linear infinite; display:flex; gap:4rem; }
+    #ann-bar .mtrack:hover { animation-play-state:paused; }
+    @keyframes marquee { from{transform:translateX(100vw);} to{transform:translateX(-100%);} }
+    #ann-close { background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer; font-size:1rem; padding:.2rem .4rem; border-radius:4px; }
+    #ann-close:hover { color:white; }
+
+    /* HEADER */
+    header { position:sticky; top:0; z-index:200; background:var(--white); border-bottom:1px solid var(--fog); box-shadow:0 2px 16px rgba(15,31,46,.07); }
+    .hi { max-width:1280px; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; gap:1rem; height:62px; }
+    .logo { display:flex; align-items:center; gap:.8rem; flex-shrink:0; text-decoration:none; }
+    .logo img { height:40px; object-fit:contain; }
+    .logo-org   { font-size:.62rem; color:var(--mist); letter-spacing:.07em; }
+    .logo-title { font-size:.9rem; font-weight:800; color:var(--navy); }
+    nav.mn { display:flex; align-items:center; gap:.1rem; margin:0 auto; }
+    .nb { display:flex; align-items:center; gap:.35rem; padding:.5rem .85rem; border-radius:9px; font-size:.82rem; font-weight:500; color:var(--slate); background:none; border:none; cursor:pointer; font-family:'Noto Sans TC',sans-serif; transition:background .18s,color .18s; white-space:nowrap; }
+    .nb:hover { background:var(--snow); color:var(--teal); }
+    .nb.active { background:var(--teal-lt); color:var(--teal); font-weight:700; }
+    .nb:disabled { opacity:.4; cursor:not-allowed; }
+    .hr { display:flex; align-items:center; gap:.7rem; margin-left:auto; flex-shrink:0; }
+
+    /* USER CHIP */
+    .uchip { display:flex; align-items:center; gap:.45rem; padding:.3rem .7rem .3rem .45rem; background:var(--snow); border:1px solid var(--fog); border-radius:99px; cursor:pointer; position:relative; font-size:.8rem; transition:border-color .18s; }
+    .uchip:hover { border-color:var(--teal-md); }
+    .uavatar { font-size:1.05rem; }
+    .uname { font-weight:600; color:var(--navy); max-width:80px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .rbsm { font-size:.62rem; font-weight:700; padding:.14rem .42rem; border-radius:99px; letter-spacing:.04em; }
+    .rb-admin  { background:#fde8ec; color:var(--rose); }
+    .rb-editor { background:var(--gold-lt); color:var(--gold); }
+    .rb-viewer { background:var(--teal-lt); color:var(--teal); }
+    .rb-guest  { background:var(--snow); color:var(--mist); border:1px solid var(--fog); }
+    .udrop { position:absolute; top:calc(100% + 8px); right:0; background:var(--white); border:1px solid var(--fog); border-radius:14px; box-shadow:var(--shadow-lg); min-width:210px; z-index:1000; padding:.55rem; display:none; }
+    .uchip.open .udrop { display:block; }
+    .dd-hd { padding:.55rem .75rem .7rem; border-bottom:1px solid var(--fog); margin-bottom:.35rem; }
+    .dd-nm { font-weight:800; color:var(--navy); font-size:.88rem; }
+    .dd-dp { font-size:.74rem; color:var(--mist); }
+    .ddi { display:flex; align-items:center; gap:.55rem; padding:.5rem .75rem; border-radius:9px; font-size:.82rem; color:var(--slate); cursor:pointer; transition:background .15s; background:none; border:none; font-family:'Noto Sans TC',sans-serif; width:100%; text-align:left; }
+    .ddi:hover { background:var(--snow); }
+    .ddi.danger { color:var(--rose); }
+    .ddi.danger:hover { background:#fde8ec; }
+    .dd-div { height:1px; background:var(--fog); margin:.35rem 0; }
+
+    /* HAMBURGER */
+    .hbg { display:none; align-items:center; justify-content:center; width:38px; height:38px; background:none; border:none; cursor:pointer; border-radius:9px; color:var(--slate); font-size:1.2rem; transition:background .18s; }
+    .hbg:hover { background:var(--snow); }
+
+    /* SUB NAV */
+    #sub-nav { background:var(--white); border-bottom:1px solid var(--fog); display:none; }
+    #sub-nav.show { display:flex; }
+    .sni { max-width:1280px; margin:0 auto; padding:.5rem 1.5rem; display:flex; gap:.45rem; }
+    .sb { padding:.38rem .8rem; border-radius:8px; font-size:.8rem; font-weight:600; background:none; border:1.5px solid transparent; cursor:pointer; color:var(--slate); font-family:'Noto Sans TC',sans-serif; transition:all .18s; }
+    .sb:hover { background:var(--snow); color:var(--teal); }
+    .sb.active { background:var(--teal); color:white; border-color:var(--teal); }
+
+    /* MOBILE DRAWER */
+    #mob-drawer { display:none; position:fixed; inset:0; z-index:500; }
+    #mob-drawer.open { display:block; }
+    .dbdrop { position:absolute; inset:0; background:rgba(15,31,46,.4); backdrop-filter:blur(3px); }
+    .dpanel { position:absolute; top:0; left:0; bottom:0; width:275px; background:var(--white); box-shadow:var(--shadow-lg); display:flex; flex-direction:column; animation:slideD .25s ease; }
+    @keyframes slideD { from{transform:translateX(-100%);} to{transform:translateX(0);} }
+    .dp-head { padding:1.1rem 1.2rem .85rem; border-bottom:1px solid var(--fog); display:flex; align-items:center; justify-content:space-between; }
+    .dp-close { background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--mist); }
+    .dp-user { padding:.9rem 1.2rem; background:var(--snow); border-bottom:1px solid var(--fog); }
+    .dp-nm { font-weight:800; color:var(--navy); font-size:.9rem; }
+    .dp-dp { font-size:.74rem; color:var(--mist); margin-top:.12rem; }
+    .dp-nav { flex:1; padding:.7rem .75rem; display:flex; flex-direction:column; gap:.2rem; overflow-y:auto; }
+    .dbtn { display:flex; align-items:center; gap:.65rem; padding:.7rem .95rem; border-radius:10px; font-size:.86rem; font-weight:500; color:var(--slate); background:none; border:none; cursor:pointer; font-family:'Noto Sans TC',sans-serif; transition:background .18s,color .18s; text-align:left; }
+    .dbtn:hover { background:var(--snow); color:var(--teal); }
+    .dbtn.active { background:var(--teal-lt); color:var(--teal); font-weight:700; }
+    .dp-sec { font-size:.67rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--mist); padding:.55rem .95rem .2rem; }
+    .dp-foot { padding:.75rem 1.2rem; border-top:1px solid var(--fog); }
+    .dp-logout { display:flex; align-items:center; gap:.55rem; width:100%; padding:.6rem .95rem; border-radius:10px; background:#fde8ec; border:none; color:var(--rose); font-size:.84rem; font-weight:700; cursor:pointer; font-family:'Noto Sans TC',sans-serif; transition:background .18s; }
+    .dp-logout:hover { background:#fbd0d8; }
+
+    /* CONTENT */
+    #app { max-width:1280px; margin:0 auto; padding:1.5rem 1.5rem 4rem; }
+    .ifw { background:var(--white); border:1px solid var(--fog); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); }
+    #cf { width:100%; border:none; min-height:600px; display:block; }
+    #no-perm { display:none; text-align:center; padding:4rem 2rem; background:var(--white); border:1px solid var(--fog); border-radius:var(--radius-lg); }
+    #no-perm .npi { font-size:3rem; margin-bottom:1rem; }
+    #no-perm h2 { font-size:1.2rem; color:var(--navy); margin-bottom:.5rem; }
+    #no-perm p { font-size:.85rem; color:var(--mist); }
+
+    /* ADMIN PANEL */
+    #adm { display:none; background:var(--white); border:1px solid var(--fog); border-radius:var(--radius-lg); padding:2rem; box-shadow:var(--shadow); }
+    .adm-title { display:flex; align-items:center; gap:.7rem; font-size:1.1rem; font-weight:800; color:var(--navy); margin-bottom:1.4rem; padding-bottom:1rem; border-bottom:1px solid var(--fog); }
+    .ut { width:100%; border-collapse:collapse; }
+    .ut th { text-align:left; padding:.6rem .9rem; font-size:.72rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--mist); background:var(--snow); border-bottom:1px solid var(--fog); }
+    .ut td { padding:.7rem .9rem; font-size:.84rem; color:var(--ink); border-bottom:1px solid var(--fog); }
+    .ut tr:last-child td { border-bottom:none; }
+    .ut tr:hover td { background:var(--snow); }
+    .pc { font-size:.7rem; font-weight:600; padding:.2rem .55rem; border-radius:99px; background:var(--teal-lt); color:var(--teal); }
+    .pc.no { background:var(--snow); color:var(--mist); text-decoration:line-through; }
+
+    /* FOOTER */
+    footer { background:var(--navy); color:rgba(255,255,255,.65); padding:2.5rem 1.5rem 1.5rem; margin-top:3rem; }
+    .fi { max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:2rem; padding-bottom:1.5rem; }
+    footer h4 { font-size:.8rem; font-weight:700; color:var(--white); margin-bottom:.65rem; }
+    footer p, footer a { font-size:.78rem; line-height:1.85; color:rgba(255,255,255,.6); }
+    footer a { text-decoration:none; }
+    footer a:hover { color:var(--teal-md); }
+    .fb2 { max-width:1280px; margin:0 auto; border-top:1px solid rgba(255,255,255,.1); padding-top:1rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.5rem; }
+    .fb2 p { font-size:.72rem; color:rgba(255,255,255,.35); }
+    .top-btn { background:rgba(255,255,255,.08); border:none; color:rgba(255,255,255,.45); font-size:.72rem; padding:.3rem .9rem; border-radius:99px; cursor:pointer; font-family:inherit; }
+
+    /* FAB */
+    .fabs { position:fixed; bottom:1.5rem; right:1.5rem; display:flex; flex-direction:column; gap:.55rem; z-index:100; }
+    .fab { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; font-size:1.1rem; box-shadow:var(--shadow); transition:transform .2s,box-shadow .2s; }
+    .fab:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+    .fab-fb { background:var(--teal); color:white; }
+    .fab-tp { background:white; color:var(--teal); border:1px solid var(--fog); display:none; }
+
+    /* FEEDBACK MODAL */
+    #fbm { display:none; position:fixed; inset:0; z-index:9999; background:rgba(15,31,46,.5); backdrop-filter:blur(5px); align-items:center; justify-content:center; padding:1rem; }
+    #fbm.open { display:flex; }
+    .fbbox { background:var(--white); border-radius:var(--radius-lg); width:min(600px,100%); max-height:88vh; display:flex; flex-direction:column; box-shadow:var(--shadow-lg); animation:scaleIn .25s ease; }
+    @keyframes scaleIn { from{transform:scale(.94);opacity:0;} to{transform:scale(1);opacity:1;} }
+    .fbh { display:flex; align-items:flex-start; justify-content:space-between; padding:1.3rem 1.4rem .9rem; border-bottom:1px solid var(--fog); }
+    .fbh h3 { font-size:.93rem; font-weight:800; color:var(--navy); }
+    .fbh p { font-size:.78rem; color:var(--mist); margin-top:.18rem; }
+    .fbclose { background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--mist); }
+    .fbbody iframe { width:100%; height:480px; border:none; }
+    .fbfoot { padding:.7rem 1.4rem; background:var(--snow); border-radius:0 0 var(--radius-lg) var(--radius-lg); }
+    .fbfoot p { font-size:.72rem; color:var(--mist); text-align:center; }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){ nav.mn{display:none;} .hbg{display:flex;} }
+    @media(max-width:600px){ .hi{padding:0 1rem;} #app{padding:1rem 1rem 4rem;} .fi{grid-template-columns:1fr;gap:1.2rem;} .uname{display:none;} }
+    @media(max-width:480px){ .logo-text{display:none;} }
+  </style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT -->
+<div id="ann-bar">
+  <div class="mwrap"><div class="mtrack">
+    <span>✨ 平台正式上線！歡迎同仁多加使用，內容持續進行優化喔。</span>
+    <span>🚀 有任何問題歡迎使用 Microsoft Forms 線上回饋！</span>
+    <span>✨ 平台正式上線！歡迎同仁多加使用，內容持續進行優化喔。</span>
+    <span>🚀 有任何問題歡迎使用 Microsoft Forms 線上回饋！</span>
+  </div></div>
+  <button id="ann-close">✕</button>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="hi">
+    <a class="logo" href="index.html">
+      <img src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png" alt="品管部" />
+      <div><div class="logo-org">奇美醫療財團法人奇美醫院</div><div class="logo-title">品質改善整合資源平台</div></div>
+    </a>
+
+    <nav class="mn">
+      <button class="nb active" id="nb-home"   onclick="goHome()">🚀 首頁</button>
+      <button class="nb"        id="nb-tools"  onclick="showToolTabs()">🎁 工具大禮包</button>
+      <button class="nb"        id="nb-format" onclick="showFormatTabs()">📝 書面格式</button>
+      <button class="nb"        id="nb-ref"    onclick="loadPage('參考資料.html','nb-ref')">🛠️ 參考資料</button>
+      <button class="nb"        id="nb-quiz"   onclick="loadPage('小測驗.html','nb-quiz')">🎯 小試身手</button>
+      <button class="nb"        id="nb-adm"    onclick="showAdmin()" style="display:none">⚙️ 管理</button>
+    </nav>
+
+    <div class="hr">
+      <div class="uchip" id="uchip" onclick="toggleDrop()">
+        <span class="uavatar" id="uavatar">👤</span>
+        <span class="uname"   id="uname">—</span>
+        <span class="rbsm"    id="urole"></span>
+        <span style="font-size:.7rem;color:var(--mist)">▾</span>
+        <div class="udrop" id="udrop">
+          <div class="dd-hd">
+            <div class="dd-nm" id="dd-nm">—</div>
+            <div class="dd-dp" id="dd-dp">—</div>
+            <div style="margin-top:.35rem"><span class="rbsm" id="dd-role"></span></div>
+          </div>
+          <button class="ddi" id="dd-adm" onclick="showAdmin()" style="display:none">⚙️ 用戶管理</button>
+          <div class="dd-div"></div>
+          <button class="ddi danger" onclick="doLogout()">🚪 登出</button>
+        </div>
+      </div>
+      <button class="hbg" onclick="openDrawer()">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- SUB NAV -->
+<div id="sub-nav"><div class="sni" id="sni"></div></div>
+
+<!-- MOBILE DRAWER -->
+<div id="mob-drawer">
+  <div class="dbdrop" onclick="closeDrawer()"></div>
+  <div class="dpanel">
+    <div class="dp-head">
+      <div style="font-weight:800;font-size:.9rem;color:var(--navy)">選單</div>
+      <button class="dp-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="dp-user">
+      <div class="dp-nm"  id="dp-nm">—</div>
+      <div class="dp-dp"  id="dp-dp">—</div>
+      <div style="margin-top:.35rem"><span class="rbsm" id="dp-role"></span></div>
+    </div>
+    <div class="dp-nav">
+      <div class="dp-sec">主選單</div>
+      <button class="dbtn active" id="db-home"   onclick="closeDrawer();goHome()">🚀 首頁</button>
+      <button class="dbtn"        id="db-tools"  onclick="closeDrawer();showToolTabs()">🎁 工具大禮包</button>
+      <button class="dbtn"        id="db-format" onclick="closeDrawer();showFormatTabs()">📝 書面格式</button>
+      <button class="dbtn"        id="db-ref"    onclick="closeDrawer();loadPage('參考資料.html','nb-ref')">🛠️ 參考資料</button>
+      <button class="dbtn"        id="db-quiz"   onclick="closeDrawer();loadPage('小測驗.html','nb-quiz')">🎯 小試身手</button>
+      <div class="dp-sec" id="dp-adm-sec" style="display:none">系統管理</div>
+      <button class="dbtn"  id="db-adm"   onclick="closeDrawer();showAdmin()" style="display:none">⚙️ 用戶管理</button>
+    </div>
+    <div class="dp-foot">
+      <button class="dp-logout" onclick="doLogout()">🚪 登出平台</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="app">
+  <div id="no-perm"><div class="npi">🔒</div><h2>您沒有存取此功能的權限</h2><p>請聯絡品質管理部以申請相應權限。</p></div>
+  <div class="ifw" id="ifw"><iframe id="cf" title="內容"></iframe></div>
+  <div id="adm">
+    <div class="adm-title">⚙️ 用戶管理 <span style="font-size:.78rem;font-weight:400;color:var(--mist)">RBAC 角色權限管理</span></div>
+    <div style="font-size:.84rem;font-weight:700;color:var(--navy);margin-bottom:.75rem">系統用戶列表</div>
+    <div style="overflow-x:auto;margin-bottom:1.8rem"><table class="ut"><thead><tr><th>用戶</th><th>帳號</th><th>部門</th><th>角色</th></tr></thead><tbody id="utb"></tbody></table></div>
+    <div style="font-size:.84rem;font-weight:700;color:var(--navy);margin-bottom:.75rem">功能權限矩陣</div>
+    <div style="overflow-x:auto"><table class="ut"><thead><tr><th>功能</th><th>管理員</th><th>編輯者</th><th>一般同仁</th><th>訪客</th></tr></thead><tbody id="ptb"></tbody></table></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fi">
+    <div>
+      <h4>奇美醫院品質管理部</h4>
+      <p>致力於協助全院同仁推動品質改善工作，提供系統化工具與資源支援。</p>
+      <p id="last-upd" style="margin-top:.55rem;font-size:.72rem;opacity:.55"></p>
+    </div>
+    <div>
+      <h4>聯絡資訊</h4>
+      <p>📍 奇美醫療財團法人奇美醫院 品質管理部<br>📞 (06) 281-2811 分機 52950/52952</p>
+    </div>
+    <div>
+      <h4>意見回饋</h4>
+      <p>✉️ <a href="mailto:cqm@mail.chimei.org.tw">cqm@mail.chimei.org.tw</a></p>
+      <p style="font-size:.7rem;opacity:.55;margin-top:.4rem">本系統內容僅供內部教育與品質改善使用，未經許可請勿轉載。</p>
+    </div>
+  </div>
+  <div class="fb2">
+    <p>© 2026 奇美醫院品質管理部 版權所有</p>
+    <button class="top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ 回到頂端</button>
+  </div>
+</footer>
+
+<!-- FAB -->
+<div class="fabs">
+  <button class="fab fab-fb" onclick="openFB()" title="意見回饋">💬</button>
+  <button class="fab fab-tp" id="fabtp" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回頂">↑</button>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div id="fbm">
+  <div class="fbbox">
+    <div class="fbh">
+      <div><h3>💡 您的建議是我們持續改善的動力</h3><p>不論是功能錯誤、內容補充或使用心得，歡迎告訴我們。</p></div>
+      <button class="fbclose" onclick="closeFB()">✕</button>
+    </div>
+    <div class="fbbody"><iframe src="https://forms.office.com/r/bD284wNPjB" title="回饋表單">載入中…</iframe></div>
+    <div class="fbfoot"><p>感謝您協助奇美醫院品質管理部建立更好的資源平台</p></div>
+  </div>
+</div>
+
+<script>
+/* AUTH */
+const user = QCC_AUTH.getUser();
+if (!user) { window.location.href = 'login.html'; }
+
+/* ── UI INIT ── */
+(function() {
+  if (!user) return;
+  const rc = QCC_AUTH.roleConfig(user.role);
+  const clsMap = { admin:'rb-admin', editor:'rb-editor', viewer:'rb-viewer', guest:'rb-guest' };
+  const cls = clsMap[user.role] || 'rb-guest';
+
+  const set = (id, txt, className) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (txt !== undefined) el.textContent = txt;
+    if (className !== undefined) el.className = className;
+  };
+
+  document.getElementById('uavatar').textContent = user.avatar;
+  document.getElementById('uname').textContent   = user.name;
+  set('urole', rc.label, `rbsm ${cls}`);
+  set('dd-nm', user.name);
+  set('dd-dp', user.dept);
+  set('dd-role', rc.label, `rbsm ${cls}`);
+  set('dp-nm', user.name);
+  set('dp-dp', user.dept);
+  set('dp-role', rc.label, `rbsm ${cls}`);
+
+  if (user.role === 'admin') {
+    ['nb-adm','dd-adm','db-adm'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='flex'; });
+    const s=document.getElementById('dp-adm-sec'); if(s) s.style.display='block';
+  }
+  if (user.role === 'guest') {
+    ['nb-tools','nb-format','nb-quiz'].forEach(id => {
+      const el=document.getElementById(id);
+      if (el) { el.disabled=true; el.title='您的帳號權限不足'; }
+    });
+  }
+})();
+
+/* ── ELEMENTS ── */
+const cf  = document.getElementById('cf');
+const ifw = document.getElementById('ifw');
+const np  = document.getElementById('no-perm');
+const adm = document.getElementById('adm');
+
+/* ── HELPERS ── */
+function setActive(id) {
+  ['nb-home','nb-tools','nb-format','nb-ref','nb-quiz','nb-adm'].forEach(x => {
+    const el=document.getElementById(x); if(el) el.classList.remove('active');
+  });
+  ['db-home','db-tools','db-format','db-ref','db-quiz','db-adm'].forEach(x => {
+    const el=document.getElementById(x); if(el) el.classList.remove('active');
+  });
+  const el=document.getElementById(id); if(el) el.classList.add('active');
+  const db=document.getElementById(id.replace('nb-','db-')); if(db) db.classList.add('active');
+}
+
+function hideSub() {
+  document.getElementById('sub-nav').classList.remove('show');
+  document.getElementById('sni').innerHTML = '';
+}
+
+function showSub(tabs) {
+  const c = document.getElementById('sni');
+  c.innerHTML = '';
+  tabs.forEach((t,i) => {
+    const b = document.createElement('button');
+    b.className = 'sb' + (i===0?' active':'');
+    b.textContent = t.label;
+    b.onclick = () => {
+      document.querySelectorAll('.sb').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      loadFrame(t.page);
+    };
+    c.appendChild(b);
+  });
+  document.getElementById('sub-nav').classList.add('show');
+}
+
+function showContent(on) {
+  ifw.style.display = on?'block':'none';
+  np.style.display  = 'none';
+  adm.style.display = 'none';
+}
+
+function showDenied() {
+  ifw.style.display = 'none';
+  np.style.display  = 'block';
+  adm.style.display = 'none';
+}
+
+function loadFrame(page) {
+  showContent(true);
+  cf.src = page;
+  cf.onload = () => {
+    try {
+      const h = (cf.contentDocument||cf.contentWindow.document).body.scrollHeight;
+      cf.style.height = (h+50)+'px';
+    } catch(e) { cf.style.height='1200px'; }
+  };
+}
+
+/* ── ACTIONS ── */
+function goHome() { setActive('nb-home'); hideSub(); loadFrame('首頁.html'); }
+
+function showToolTabs() {
+  if (!QCC_AUTH.can('viewTools')) { setActive('nb-tools'); hideSub(); showDenied(); return; }
+  setActive('nb-tools');
+  showSub([
+    { label:'🎁 工具大禮包', page:'工具大禮包.html' },
+    { label:'🛠️ 品管工具',   page:'品管工具.html'  },
+    { label:'📚 品管手法',   page:'品管手法2.html' },
+  ]);
+  loadFrame('工具大禮包.html');
+}
+
+function showFormatTabs() {
+  if (!QCC_AUTH.can('viewFormat')) { setActive('nb-format'); hideSub(); showDenied(); return; }
+  setActive('nb-format');
+  showSub([
+    { label:'🧩 問題解決型', page:'書面格式_問題型.html' },
+    { label:'💡 課題達成型', page:'書面格式_課達型.html' },
+  ]);
+  loadFrame('書面格式_問題型.html');
+}
+
+function loadPage(page, navId) {
+  const pm = { '參考資料.html':'viewReference', '小測驗.html':'viewQuiz' };
+  const p = pm[page];
+  if (p && !QCC_AUTH.can(p)) { setActive(navId); hideSub(); showDenied(); return; }
+  setActive(navId); hideSub(); loadFrame(page);
+}
+
+function showAdmin() {
+  if (!QCC_AUTH.can('manageUsers')) { showDenied(); return; }
+  setActive('nb-adm'); hideSub();
+  ifw.style.display='none'; np.style.display='none'; adm.style.display='block';
+  renderAdmin();
+}
+
+/* ── ADMIN ── */
+function renderAdmin() {
+  const users = QCC_AUTH.getUsers();
+  const clsMap = { admin:'rb-admin', editor:'rb-editor', viewer:'rb-viewer', guest:'rb-guest' };
+  const lblMap = { admin:'管理員', editor:'編輯者', viewer:'一般同仁', guest:'訪客' };
+  document.getElementById('utb').innerHTML = users.map(u => `
+    <tr>
+      <td>${u.avatar} ${u.name}</td>
+      <td style="font-family:monospace;font-size:.8rem">${u.username}</td>
+      <td>${u.dept}</td>
+      <td><span class="rbsm ${clsMap[u.role]||'rb-guest'}">${lblMap[u.role]||u.role}</span></td>
+    </tr>`).join('');
+
+  const perms = QCC_AUTH.PERMISSIONS;
+  const roles = ['admin','editor','viewer','guest'];
+  const pl = { viewHome:'瀏覽首頁', viewTools:'工具大禮包', viewFormat:'書面格式', viewReference:'參考資料', viewQuiz:'小試身手', editContent:'編輯內容', manageUsers:'管理用戶', viewStats:'查看統計', exportData:'匯出資料' };
+  document.getElementById('ptb').innerHTML = Object.entries(perms).map(([k,a]) =>
+    `<tr><td style="font-weight:600">${pl[k]||k}</td>${roles.map(r=>`<td><span class="pc${a.includes(r)?'':' no'}">${a.includes(r)?'✓':'✗'}</span></td>`).join('')}</tr>`
+  ).join('');
+}
+
+/* ── DROPDOWN ── */
+function toggleDrop() { document.getElementById('uchip').classList.toggle('open'); }
+document.addEventListener('click', e => { if(!document.getElementById('uchip').contains(e.target)) document.getElementById('uchip').classList.remove('open'); });
+
+/* ── DRAWER ── */
+function openDrawer()  { document.getElementById('mob-drawer').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeDrawer() { document.getElementById('mob-drawer').classList.remove('open'); document.body.style.overflow=''; }
+
+/* ── FEEDBACK ── */
+function openFB()  { document.getElementById('fbm').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeFB() { document.getElementById('fbm').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('fbm').addEventListener('click', e=>{ if(e.target===document.getElementById('fbm')) closeFB(); });
+
+/* ── SCROLL ── */
+window.addEventListener('scroll', ()=>{ document.getElementById('fabtp').style.display=window.scrollY>300?'flex':'none'; });
+
+/* ── ANN ── */
+document.getElementById('ann-close').onclick = ()=>{ document.getElementById('ann-bar').style.display='none'; };
+
+/* ── LOGOUT ── */
+function doLogout() { QCC_AUTH.logout(); window.location.href='login.html'; }
+
+/* ── LAST UPDATED ── */
+async function fetchUpdated() {
+  const el=document.getElementById('last-upd');
+  const fmt=new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+  try {
+    const r=await fetch('https://api.github.com/repos/YuTien0627/QCC/commits?per_page=1',{cache:'no-store'});
+    const d=await r.json();
+    if(d&&d[0]) el.textContent='最後更新：'+fmt.format(new Date(d[0].commit.committer.date)).replace(/\//g,'-');
+  } catch(e){}
+}
+
+/* ── BOOT ── */
+window.onload = ()=>{ goHome(); fetchUpdated(); };
+</script>
+</body>
+</html>
