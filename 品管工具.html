@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>品管工具選哪招？跟我走！</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-pink': '#F472B6',
+                        'secondary-purple': '#A78BFA',
+                        'goal-green': '#34D399',
+                        'issue-red': '#F87171',
+                        'bg-paper': '#ecfdf5',
+                        'card-yellow': '#FFF9C4'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 移除內部滾輪，由父頁面控制高度，但保留內容高度計算能力 */
+        html {
+            overflow-y: visible;
+            overflow-x: hidden;
+            background-color: #ecfdf5; /* 與 index 背景一致 */
+        }
+        
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #ecfdf5; /* 與 index 背景一致 */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 避免出現子捲軸 */
+        }
+        
+        /* 頁首風格：白底卡片＋上方青色粗條 */
+        .header-card {
+            background-color: #ffffff;
+            border-top: 8px solid #0d9488; /* teal-600 */
+            border-radius: 1rem;
+            box-shadow: 0 20px 35px -18px rgba(15, 23, 42, 0.45);
+        }
+
+        .btn {
+            @apply px-10 py-6 rounded-full font-extrabold text-3xl md:text-4xl transition duration-300 shadow-lg border-b-4 border-opacity-70;
+            white-space: normal;
+        }
+        .btn-pink { @apply bg-primary-pink text-white border-primary-pink/80 hover:bg-pink-500 hover:border-pink-600 active:translate-y-1 active:shadow-sm; }
+        .btn-purple { @apply bg-secondary-purple text-white border-secondary-purple/80 hover:bg-violet-500 hover:border-violet-600 active:translate-y-1 active:shadow-sm; }
+        .btn-reset { @apply bg-gray-400 text-white border-gray-500 hover:bg-gray-500 hover:border-gray-600 active:translate-y-1 active:shadow-sm text-base; }
+        
+        .decision-card { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .animate-popIn { animation: popIn 0.4s ease-out; }
+        
+        .fun-question-card { box-shadow: 10px 10px 0 0 #F472B6, 15px 15px 0 0 #A78BFA; transition: all 0.2s ease-out; }
+        .fun-question-card:hover { transform: translate(-2px, -2px); box-shadow: 12px 12px 0 0 #F472B6, 17px 17px 0 0 #A78BFA; }
+        
+        .breadcrumb-node { @apply flex items-center bg-secondary-purple text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md; cursor: pointer; }
+        .breadcrumb-node-active { @apply bg-primary-pink text-white; }
+        .breadcrumb-node-result { @apply bg-primary-pink/20 text-gray-800; }
+        
+        /* 激活父頁面頁籤的樣式 (對應 index.html 內的 active-tab) */
+        .active-tab { background-color: #0d9488 !important; color: white !important; font-weight: 700 !important; }
+
+        /* Modal 動畫樣式 */
+        .modal-fade-in { animation: modalFadeIn 0.3s ease-out; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="py-6 px-4">
+
+    <!-- [提示視窗：頁面建置中] -->
+    <div id="comingSoonModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden px-4">
+        <div class="bg-white rounded-[2.5rem] p-10 max-w-sm w-full shadow-2xl text-center modal-fade-in border border-slate-100">
+            <div class="text-7xl mb-6 text-yellow-500">🚧</div>
+            <h3 class="text-2xl font-black text-slate-800 mb-3">頁面建置中</h3>
+            <p class="text-slate-500 mb-8 leading-relaxed">
+                這部分內容正在努力趕工中，<br>請密切關注後續更新！
+            </p>
+            <button onclick="closeModal()" class="w-full py-4 bg-teal-600 text-white rounded-2xl font-bold shadow-lg shadow-teal-100 hover:bg-teal-700 transition-all active:scale-95">
+                知道了
+            </button>
+        </div>
+    </div>
+
+    <div id="app" class="w-full max-w-4xl mx-auto">
+
+        <!-- 頁首 -->
+        <header id="page-header" class="text-center mb-10 p-8 header-card">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
+                🛠️ 品管工具選哪招？跟我走！ 💡
+            </h1>
+            <p class="text-lg text-gray-500 font-medium">遇到問題但不知該用何種工具解決？透過以下問答找到適用的改善工具！</p>
+        </header>
+
+        <!-- 歷史足跡 -->
+        <div id="history-trail" class="flex flex-wrap gap-2 mb-8 items-center justify-center min-h-[40px] border-b pb-4 border-gray-200/50"></div>
+
+        <!-- 決策樹內容區 -->
+        <div id="question-card-container" class="w-full"></div>
+
+        <!-- 重置按鈕 -->
+        <div id="reset-button-container" class="mt-12 pt-4 border-t border-gray-200/50 text-center pb-10">
+            <button class="btn btn-reset px-6 py-3" onclick="navigate('Q1')">🔄 重置挑戰</button>
+        </div>
+    </div>
+
+    <script>
+        const decisionTree = {
+            Q1: { title: "🐾 關卡一：挑戰類型", question: "您想處理的是「【已經發生】的麻煩事/壞結果」 (問題型)？還是【未來想達成】的新成就/好水準 (課題型)？", icon: "🤔", options: [
+                { text: "😭 現有缺失或異常 (問題解決型)", next: "Q2", style: "btn-pink" },
+                { text: "🤩 未來目標或任務 (課題達成型)", next: "R_GOAL", style: "btn-purple" }
+            ] },
+            Q2: { title: "🚨 關卡二：預防或解決", question: "您的目標是「【預先】阻止流程中【潛在】的風險發生」嗎？", icon: "🛡️", options: [
+                { text: "🎯 是，預先評估與控制風險 (預防針)", next: "R_HFMEA", style: "btn-purple" },
+                { text: "🤕 否，分析已經發生的問題 (解毒劑)", next: "Q3", style: "btn-pink" }
+            ] },
+            Q3: { title: "💥 關卡三：事件嚴重性", question: "這個問題是「【超級嚴重】的重大/不良事件」，您需要找出【系統性的最終原因】並【保證不再發生】嗎？", icon: "🔍", options: [
+                { text: "🚀 是，追查根本原因 (重大不良事件)", next: "R_RCA", style: "btn-purple" },
+                { text: "🧹 否，一般性缺失改善 (日常品質提升)", next: "R_QCC", style: "btn-pink" }
+            ] },
+            R_GOAL: { title: "🎉 恭喜！您找到了成功鑰匙！", methodology: "💡 課題達成型 (Goal-Achievement)", purpose: "這方法專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！", icon: "🏆" },
+            R_HFMEA: { title: "💖 風險防護罩已啟動！", methodology: "🛡️ HFMEA (醫療失效模式與效應分析)", purpose: "它能幫助您在風險發生前，找到流程中所有可能的「地雷」並提前控制，讓流程更安全！", icon: "🚨" },
+            R_RCA: { title: "🕵️‍♂️ 系統偵探出動！", methodology: "🔎 RCA (根本原因分析)", purpose: "當發生重大不良事件時，它能找出系統性的漏洞，確保事件不再發生！", icon: "🤯" },
+            R_QCC: { title: "🛠️ 日常優化專家就是您！", methodology: "✨ QCC (問題解決型/品質改善)", purpose: "當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", icon: "🌈" }
+        };
+
+        let currentStepKey = "Q1";
+        let history = [];
+        const historyTrailDiv = document.getElementById('history-trail');
+        const questionCardContainer = document.getElementById('question-card-container');
+
+        // 已完成開發的頁面清單
+        const COMPLETED_PAGES = ['書面格式_問題型.html', '書面格式_課達型.html'];
+
+        function closeModal() { document.getElementById('comingSoonModal').classList.add('hidden'); }
+        function showModal() { document.getElementById('comingSoonModal').classList.remove('hidden'); }
+
+        /**
+         * 智慧同步：主動叫出父頁面的次級頁籤並同步導覽狀態
+         */
+        function syncParentUI() {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'qcc-sync-ui',
+                    navId: 'nav-btn-selection',
+                    showTabs: 'tool-tabs',
+                    hideTabs: 'format-tabs',
+                    subTabIndex: 0 // 品管工具索引為 0
+                }, '*');
+
+                try {
+                    if (typeof window.parent.activateNav === 'function') {
+                        window.parent.activateNav('nav-btn-selection');
+                    }
+                    const parentToolTabs = window.parent.document.getElementById('tool-tabs');
+                    if (parentToolTabs) parentToolTabs.classList.remove('hidden');
+                    
+                    const subTabs = window.parent.document.querySelectorAll('.sub-tab');
+                    subTabs.forEach((tab, idx) => {
+                        tab.classList.remove('active-tab');
+                        if (idx === 0) tab.classList.add('active-tab');
+                    });
+                } catch (e) {}
+            }
+        }
+
+        /**
+         * 跨頁面同步跳轉：當從結果跳往「書面格式」頁面時執行
+         * @param {string} page - 目標頁面網址
+         * @param {number} subTabIndex - 父頁面 format-tabs 內的按鈕索引 (0:問題型, 1:課達型)
+         */
+        function navigateToFormatSection(page, subTabIndex) {
+            // 檢查頁面是否已完成
+            if (!COMPLETED_PAGES.includes(page)) {
+                showModal();
+                return;
+            }
+
+            if (window.parent && window.parent !== window) {
+                // 發送跳轉訊息給父頁面
+                window.parent.postMessage({
+                    type: 'qcc-navigate-format',
+                    page: page,
+                    subTabIndex: subTabIndex
+                }, '*');
+
+                try {
+                    // 若為同網域，直接呼叫父頁面 UI 更新邏輯
+                    if (typeof window.parent.activateNav === 'function') {
+                        window.parent.activateNav('nav-btn-format');
+                    }
+                    
+                    const formatTabs = window.parent.document.getElementById('format-tabs');
+                    const toolTabs = window.parent.document.getElementById('tool-tabs');
+                    if (formatTabs) formatTabs.classList.remove('hidden');
+                    if (toolTabs) toolTabs.classList.add('hidden');
+
+                    const tabBtns = window.parent.document.querySelectorAll('.format-tab');
+                    if (typeof window.parent.loadFormatPage === 'function' && tabBtns[subTabIndex]) {
+                        window.parent.loadFormatPage(page, tabBtns[subTabIndex]);
+                        return;
+                    }
+                } catch (e) {
+                    // 跨網域失敗時，至少嘗試讓父頁面載入網頁
+                    try {
+                        if (window.parent.loadIframe) {
+                            window.parent.loadIframe(page);
+                            return;
+                        }
+                    } catch (e2) {}
+                }
+            }
+            // 獨立開啟時直接跳轉
+            window.location.href = page;
+        }
+
+        /**
+         * 強化高度回報：確保在父頁面中沒有滾輪
+         */
+        function reportHeight() {
+            if (window.parent && window.parent !== window) {
+                const appContainer = document.getElementById('app');
+                const h = Math.max(
+                    document.documentElement.scrollHeight,
+                    document.body.scrollHeight,
+                    appContainer ? appContainer.offsetHeight + 100 : 800
+                );
+                
+                window.parent.postMessage({ type: 'resize', height: h }, '*');
+                
+                try {
+                    const pFrame = window.parent.document.getElementById('content-frame');
+                    if (pFrame) {
+                        pFrame.style.height = h + 'px';
+                    }
+                } catch (e) {}
+            }
+        }
+
+        function getStepTitle(key) {
+            if (key === 'Q1') return "挑戰類型";
+            if (key === 'Q2') return "預防或解決";
+            if (key === 'Q3') return "事件嚴重性";
+            return "最終結果";
+        }
+
+        function renderCompletedNode(item, index) {
+            const stepTitle = getStepTitle(item.key);
+            const stepNumber = index + 1;
+            return `
+                <div class="flex items-center">
+                    <button class="breadcrumb-node" onclick="rewindToStep('${item.key}')" title="點擊回到此步驟">
+                        <span class="mr-2 opacity-80">${stepNumber}. ${stepTitle}</span>
+                        <span class="font-normal text-xs opacity-70">(${item.text.split(' ')[0]})</span>
+                    </button>
+                    <span class="text-secondary-purple mx-1.5 md:mx-2 text-2xl font-bold">»</span>
+                </div>
+            `;
+        }
+
+        function renderCurrentQuestion(step, stepKey) {
+            const stepNumber = stepKey.replace('Q', '');
+            const bgColors = { 'btn-pink': 'bg-primary-pink/10 border-primary-pink/30', 'btn-purple': 'bg-secondary-purple/10 border-secondary-purple/30' };
+            return `
+                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl border-4 border-white decision-card animate-popIn fun-question-card">
+                    <div class="text-center mb-8">
+                        <span class="text-6xl mb-4 block">${step.icon}</span>
+                        <h2 class="text-2xl md:text-4xl font-extrabold text-gray-800">${stepNumber}. ${step.title}</h2>
+                    </div>
+                    <div class="text-2xl text-gray-700 mb-10 p-6 md:p-8 bg-pink-50 border-4 border-primary-pink/20 rounded-2xl shadow-inner font-medium leading-relaxed text-center">
+                        ${step.question}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                        ${step.options.map(option => `
+                            <div class="p-5 rounded-2xl shadow-xl border-4 ${bgColors[option.style] || 'bg-gray-100 border-gray-300'} hover:shadow-2xl transition duration-300 transform hover:-translate-y-0.5">
+                                <button class="btn w-full ${option.style}" onclick="navigate('${option.next}', '${stepKey}', '${option.text}')">
+                                    ${option.text}
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFinalResult(result) {
+            let targetUrl = '#';
+            let subTabIndex = 0; // 預設跳轉到次標籤 0 (問題型)
+            
+            switch(currentStepKey) {
+                case 'R_QCC': 
+                    targetUrl = '書面格式_問題型.html'; 
+                    subTabIndex = 0; 
+                    break;
+                case 'R_RCA': 
+                    targetUrl = '書面格式_RCA.html'; 
+                    subTabIndex = 0; 
+                    break;
+                case 'R_HFMEA': 
+                    targetUrl = '書面格式_HFMEA.html'; 
+                    subTabIndex = 0; 
+                    break;
+                case 'R_GOAL': 
+                    targetUrl = '書面格式_課達型.html'; 
+                    subTabIndex = 1; // 課達型在 index.html 是索引 1
+                    break;
+            }
+
+            return `
+                <div class="bg-card-yellow p-6 md:p-12 rounded-3xl shadow-2xl border-t-8 border-primary-pink w-full decision-card animate-popIn">
+                    <div class="text-center mb-6">
+                        <span class="text-8xl mb-4 block animate-bounce-once">${result.icon}</span>
+                        <h2 class="text-4xl md:text-5xl font-extrabold text-primary-pink mb-4">${result.title}</h2>
+                        <div class="inline-block bg-white/70 p-4 rounded-xl border-4 border-dashed border-primary-pink shadow-lg">
+                           <p class="text-2xl md:text-4xl font-extrabold text-gray-800">✅ 建議您採用：${result.methodology}</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border-2 border-primary-pink/50 shadow-inner mb-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 border-b-2 pb-2">🎯 目的與重點摘要</h3>
+                        <p class="text-xl text-gray-600 leading-relaxed">${result.purpose}</p>
+                    </div>
+                    <p class="text-base text-center text-gray-500 mb-4 font-semibold">恭喜您完成評估！</p>
+                    <div class="text-center space-y-4">
+                        <button class="bg-primary-pink text-white border-b-4 border-pink-700 hover:bg-pink-600 active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto" 
+                                onclick="navigateToFormatSection('${targetUrl}', ${subTabIndex})">
+                            ▶️ 前往【${result.methodology}】詳細實施步驟
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderLadder() {
+            const historyHtml = history.map(renderCompletedNode).join('');
+            const isResult = currentStepKey.startsWith('R_');
+            let currentStepText, currentStepClasses;
+            if (isResult) {
+                const resultData = decisionTree[currentStepKey];
+                currentStepText = `最終推薦：${resultData.methodology}`;
+                currentStepClasses = 'breadcrumb-node-result'; 
+            } else {
+                const currentStepTitle = getStepTitle(currentStepKey);
+                currentStepText = `${history.length + 1}. ${currentStepTitle} (進行中)`;
+                currentStepClasses = 'breadcrumb-node-active';
+            }
+            const currentStepHtml = `<div class="flex items-center"><span class="breadcrumb-node ${currentStepClasses}">${currentStepText}</span></div>`;
+            historyTrailDiv.innerHTML = historyHtml + currentStepHtml;
+
+            const stepData = decisionTree[currentStepKey];
+            if (isResult) {
+                questionCardContainer.innerHTML = renderFinalResult(stepData);
+            } else if (stepData) {
+                questionCardContainer.innerHTML = renderCurrentQuestion(stepData, currentStepKey);
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(reportHeight, 100);
+        }
+
+        function navigate(nextState, questionKey, selectedText) {
+            if (questionKey && decisionTree[questionKey]) {
+                history.push({ key: questionKey, selection: nextState, text: selectedText });
+            } else if (nextState === 'Q1') {
+                history = [];
+            }
+            currentStepKey = nextState;
+            renderLadder();
+        }
+
+        function rewindToStep(targetKey) {
+            const targetIndex = history.findIndex(item => item.key === targetKey);
+            if (targetIndex !== -1) {
+                history = history.slice(0, targetIndex);
+                navigate(targetKey);
+            }
+        }
+
+        (function init() {
+            const style = document.createElement('style');
+            style.innerHTML += `
+                .animate-bounce-once {
+                    animation: bounce 0.8s ease-in-out 1;
+                }
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    20% { transform: translateY(-15px); }
+                    40% { transform: translateY(0); }
+                    60% { transform: translateY(-7px); }
+                    80% { transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            syncParentUI();
+            renderLadder();
+            
+            window.addEventListener('resize', reportHeight);
+            setInterval(reportHeight, 1500); 
+        })();
+    </script>
+</body>
+</html>

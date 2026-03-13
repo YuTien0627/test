@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QCC 新手入門首頁</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+
+    /* 卡片懸浮效果 */
+    .hover-card {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .hover-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+
+  <div class="max-w-5xl mx-auto py-10 sm:py-12 px-4 sm:px-6">
+    <!-- HERO -->
+    <section class="bg-white rounded-[2rem] shadow-2xl border border-teal-100 overflow-hidden mb-10">
+      <div class="h-3 bg-gradient-to-r from-teal-400 via-emerald-500 to-teal-600"></div>
+
+      <div class="p-8 sm:p-14">
+        <div class="text-center mb-10">
+          <h1 class="text-3xl sm:text-4xl font-black text-gray-800 tracking-tight mb-4">
+            讓品質改善不再是負擔 🚀
+          </h1>
+          <p class="text-lg text-teal-600 font-semibold italic">
+            "不只是標準格式，更是你完成 QCC 成果報告的最佳神隊友。"
+          </p>
+        </div>
+
+        <!-- Value props -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div class="p-6 rounded-2xl bg-teal-50 border border-teal-100">
+            <div class="text-4xl mb-4">🧭</div>
+            <h2 class="font-bold text-gray-800 mb-2 text-lg">精準導航</h2>
+            <p class="text-gray-600 text-sm leading-relaxed">提供清晰的思考方向，帶你釐清每個環節的撰寫邏輯。</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-100">
+            <div class="text-4xl mb-4">💡</div>
+            <h2 class="font-bold text-gray-800 mb-2 text-lg">實務提醒</h2>
+            <p class="text-gray-600 text-sm leading-relaxed">彙整常見錯誤與寫作小撇步，避開新手最容易踩的坑。</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-sky-50 border border-sky-100">
+            <div class="text-4xl mb-4">🤝</div>
+            <h2 class="font-bold text-gray-800 mb-2 text-lg">靈活應用</h2>
+            <p class="text-gray-600 text-sm leading-relaxed">沒有唯一標準答案，我們支持你根據實際情境發展最佳做法。</p>
+          </div>
+        </div>
+
+        <!-- About + CTAs -->
+        <div class="bg-gray-50 rounded-3xl p-6 sm:p-10 border border-dashed border-gray-300">
+          <div class="flex flex-col md:flex-row items-center gap-10">
+            <div class="flex-1 text-center md:text-left border-b md:border-b-0 md:border-r border-gray-200 pb-6 md:pb-0 md:pr-10">
+              <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center justify-center md:justify-start gap-2">
+                <span class="text-teal-500">📌</span> 關於這個平台
+              </h3>
+              <p class="text-gray-600 leading-loose text-sm">
+                我們明白完成一份 QCC 報告並不容易。本平台旨在協助您將改善過程轉化為有邏輯、有說服力的文字，只要您能做到
+                <span class="text-teal-700 font-bold underline underline-offset-4 decoration-teal-300">邏輯合理、過程清楚</span>，
+                就是一個最棒的作品！
+              </p>
+            </div>
+
+            <div class="shrink-0 text-center">
+              <p class="text-xs text-gray-400 mb-4 font-bold uppercase tracking-widest">Join the journey</p>
+
+              <!-- Primary + Secondary CTA -->
+              <div class="flex flex-col gap-3 items-center">
+                <a href="https://apps.powerapps.com/play/e/default-24de0681-c8f7-46e8-8da7-1f5b393d834d/a/15771135-a7a2-496d-a09d-1006a166594a?tenantId=24de0681-c8f7-46e8-8da7-1f5b393d834d&hint=52b538fa-7443-485b-9a4b-f577016feb80&sourcetime=1764946072435"
+                  target="_blank"
+                  class="group relative inline-flex items-center justify-center gap-3 px-12 py-5 bg-teal-600 text-white font-black rounded-full shadow-[0_10px_20px_-10px_rgba(13,148,136,0.6)] hover:bg-teal-700 transition-all active:scale-95">
+                  <span class="text-lg">我要報名參賽</span>
+                  <span class="text-2xl group-hover:translate-x-1 transition-transform">🔥</span>
+                </a>
+
+                <!-- 新增：開始探索資源（開啟彈窗） -->
+                <button type="button" id="openResourcesBtn"
+                  class="inline-flex items-center justify-center gap-2 px-12 py-4 rounded-full border-2 border-indigo-200 text-indigo-700 font-black hover:bg-indigo-50 transition-all active:scale-95">
+                  <span class="text-lg">平台互動指南</span>
+                  <span class="text-xl">🧩</span>
+                </button>
+              </div>
+
+              <p class="mt-4 text-[11px] text-teal-600 font-bold">奇美醫院 品質管理部 邀請您</p>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal: 平台互動指南（四張卡片只在彈窗顯示） -->
+  <div id="resourcesModal" class="fixed inset-0 z-[60] hidden" aria-hidden="true">
+    <!-- Backdrop -->
+    <div id="resourcesBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+
+    <!-- Dialog -->
+    <div class="relative min-h-full flex items-center justify-center p-4 sm:p-8">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="resourcesTitle"
+        class="w-full max-w-5xl bg-white rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden"
+      >
+        <div class="h-3 bg-gradient-to-r from-indigo-400 via-emerald-500 to-teal-600"></div>
+
+        <!-- Header -->
+        <div class="p-6 sm:p-8 flex items-start justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-sm font-bold mb-2">
+              <span class="text-lg">🧩</span> 平台互動指南
+            </div>
+            <h2 id="resourcesTitle" class="text-2xl sm:text-3xl font-black text-gray-800">平台互動指南</h2>
+            <p class="mt-2 text-gray-500 text-sm sm:text-base max-w-2xl">
+              下面四個入口會帶你快速找到需要的工具與資源：先把架構走一遍，再補強工具與練習更有效率。
+            </p>
+          </div>
+
+          <button type="button" id="closeResourcesBtn"
+            class="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition"
+            aria-label="關閉視窗">
+            ✕
+          </button>
+        </div>
+
+        <!-- Content -->
+        <div class="px-6 sm:px-8 pb-8">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+
+            <!-- 1) 工具大禮包 -->
+            <div class="hover-card bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full">
+              <div class="p-8 border-l-[12px] border-teal-600 flex-1 flex flex-col">
+                <div class="flex justify-between items-start mb-6">
+                  <h3 class="text-2xl font-black text-gray-800">🎁 工具大禮包</h3>
+                  <span class="bg-teal-50 text-teal-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">品管工具&手法</span>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                  彙整 QC 七大手法，包含柏拉圖、魚骨圖、流程圖等繪製要點。直接套用，節省您找資料的時間。
+                </p>
+                <ul class="space-y-3 text-sm text-gray-700 mb-8">
+                  <li class="flex items-center gap-2"><span class="text-teal-500 font-bold">✓</span> 新/舊QC七大手法介紹</li>
+                  <li class="flex items-center gap-2"><span class="text-teal-500 font-bold">✓</span> 繪製要點與常用軟體推薦</li>
+                </ul>
+                <div class="mt-auto">
+                  <a href="工具大禮包.html"
+                     class="block w-full text-center py-3 bg-teal-600 text-white font-bold rounded-xl hover:bg-teal-700 transition shadow-md">
+                    前往工具大禮包 →
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2) 書面格式 -->
+            <div class="hover-card bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full">
+              <div class="p-8 border-l-[12px] border-indigo-500 flex-1 flex flex-col">
+                <div class="flex justify-between items-start mb-6">
+                  <h3 class="text-2xl font-black text-gray-800">📝 書面格式</h3>
+                  <span class="bg-indigo-50 text-indigo-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">成果報告書&AI輔助工具</span>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                  引導您走過 QCC 各步驟，並結合 AI 小幫手快速釐清因果關係。
+                </p>
+                <ul class="space-y-3 text-sm text-gray-700 mb-8">
+                  <li class="flex items-center gap-2"><span class="text-indigo-500 font-bold">✓</span> 每步驟撰寫重點提醒</li>
+                  <li class="flex items-center gap-2"><span class="text-indigo-500 font-bold">✓</span> AI 輔助釐清改善邏輯</li>
+                </ul>
+                <div class="mt-auto">
+                  <a href="書面格式_問題型.html"
+                     class="block w-full text-center py-3 bg-indigo-500 text-white font-bold rounded-xl hover:bg-indigo-600 transition shadow-md">
+                    前往書面格式 →
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3) 參考資料 -->
+            <div class="hover-card bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full">
+              <div class="p-8 border-l-[12px] border-emerald-600 flex-1 flex flex-col">
+                <div class="flex justify-between items-start mb-6">
+                  <h3 class="text-2xl font-black text-gray-800">🛠️ 參考資料</h3>
+                  <span class="bg-emerald-50 text-emerald-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">影音＆講義</span>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                  歷年課程講義、影音與外部優秀案例一次收齊，補強改善功力的知識庫。
+                </p>
+                <ul class="space-y-3 text-sm text-gray-700 mb-8">
+                  <li class="flex items-center gap-2"><span class="text-emerald-500 font-bold">✓</span> 專業課程影音線上看</li>
+                  <li class="flex items-center gap-2"><span class="text-emerald-500 font-bold">✓</span> 標竿案例靈感啟發</li>
+                </ul>
+                <div class="mt-auto">
+                  <a href="參考資料.html"
+                     class="block w-full text-center py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition shadow-md">
+                    前往參考資料 →
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4) 小試身手 -->
+            <div class="hover-card bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full">
+              <div class="p-8 border-l-[12px] border-amber-500 flex-1 flex flex-col">
+                <div class="flex justify-between items-start mb-6">
+                  <h3 class="text-2xl font-black text-gray-800">🎯 小試身手</h3>
+                  <span class="bg-amber-50 text-amber-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">小測驗練習</span>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                  透過趣味小測驗釐清品管觀念，幫自己做一次「觀念掃描」。
+                </p>
+                <ul class="space-y-3 text-sm text-gray-700 mb-8">
+                  <li class="flex items-center gap-2"><span class="text-amber-500 font-bold">✓</span> 快速回饋落點分析</li>
+                  <li class="flex items-center gap-2"><span class="text-amber-500 font-bold">✓</span> 避開常見 QCC 觀念陷阱</li>
+                </ul>
+                <div class="mt-auto">
+                  <a href="小測驗.html"
+                     class="block w-full text-center py-3 bg-amber-500 text-white font-bold rounded-xl hover:bg-amber-600 transition shadow-md">
+                    前往小試身手 →
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mt-6 text-center text-xs text-gray-500">
+            小技巧：按 ESC 可關閉視窗；點擊背景也可關閉。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal JS -->
+  <script>
+    const modal = document.getElementById('resourcesModal');
+    const openBtn = document.getElementById('openResourcesBtn');
+    const openBtn2 = document.getElementById('openResourcesBtn2');
+    const closeBtn = document.getElementById('closeResourcesBtn');
+    const backdrop = document.getElementById('resourcesBackdrop');
+
+    let lastActiveEl = null;
+
+    function openModal() {
+      lastActiveEl = document.activeElement;
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('overflow-hidden');
+      setTimeout(() => closeBtn.focus(), 0);
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('overflow-hidden');
+      if (lastActiveEl) lastActiveEl.focus();
+    }
+
+    openBtn.addEventListener('click', openModal);
+    if (openBtn2) openBtn2.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

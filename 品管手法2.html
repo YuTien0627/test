@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常用品管工具總覽 - 專業互動面板</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        /* 移除原本的 sticky-panel 以確保與左側表格對齊 */
+        .tool-row {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tool-row:hover {
+            background-color: #f1f5f9;
+            cursor: pointer;
+            transform: translateX(4px);
+        }
+        .active-row {
+            background-color: #eff6ff !important;
+            border-left: 6px solid #3b82f6 !important;
+            box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.1);
+        }
+        .preview-content {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .fade-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        .fade-out {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        /* 確保預覽框高度與左側表格一致 */
+        .preview-box {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+    <div class="max-w-7xl mx-auto">
+        
+        <!-- Header Section -->
+        <header class="mb-10 p-10 bg-white rounded-3xl shadow-sm border border-slate-200 relative overflow-hidden text-center">
+            <div class="absolute top-0 left-0 right-0 h-2 bg-teal-500"></div>
+            <h1 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight">🛠️ 常用品管手法互動總覽</h1>
+            <p class="text-slate-500 mt-4 text-xl">Quality Control Tools Interactive Dashboard</p>
+            <p class="text-slate-400 mt-2 text-base italic">點擊或移動滑鼠至表格列，右側將即時切換專業圖形預覽與核心概念說明。</p>
+        </header>
+
+        <!-- 舊 QC 七手法區塊 (上) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
+            <!-- Left: Old QC 7 Tools Table -->
+            <div class="lg:col-span-7">
+                <section class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden h-full">
+                    <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-6">
+                        <h2 class="text-white font-bold text-2xl flex items-center text-left">
+                            <span class="bg-white/20 p-2 rounded-lg mr-3">📊</span> 
+                            舊 QC 七手法 <span class="ml-3 text-amber-100 font-normal text-base opacity-90">(數據統計與分析)</span>
+                        </h2>
+                    </div>
+                    <table class="w-full text-left border-collapse table-fixed">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-sm uppercase tracking-wider border-b border-slate-100">
+                                <th class="p-5 font-semibold w-[30%]">工具名稱</th>
+                                <th class="p-5 font-semibold w-[70%]">核心功能簡述</th>
+                            </tr>
+                        </thead>
+                        <tbody id="old-qc-body">
+                            <!-- Rows same as original -->
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('pareto', 'old')" data-tool="pareto">
+                                <td class="p-5 font-bold text-amber-700 text-lg">柏拉圖</td>
+                                <td class="p-5 text-sm text-slate-600">掌握關鍵少數 (80/20 法則)，決定改善優先順序。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('fishbone', 'old')" data-tool="fishbone">
+                                <td class="p-5 font-bold text-amber-700 text-lg">特性要因圖</td>
+                                <td class="p-5 text-sm text-slate-600">結構化分析因果關係，挖掘問題根因。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('checksheet', 'old')" data-tool="checksheet">
+                                <td class="p-5 font-bold text-amber-700 text-lg">查檢表</td>
+                                <td class="p-5 text-sm text-slate-600">現場數據收集的利器。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('stratification', 'old')" data-tool="stratification">
+                                <td class="p-5 font-bold text-amber-700 text-lg">層別法</td>
+                                <td class="p-5 text-sm text-slate-600">透過分類找出數據中的差異，定位問題源頭。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('scatter', 'old')" data-tool="scatter">
+                                <td class="p-5 font-bold text-amber-700 text-lg">散佈圖</td>
+                                <td class="p-5 text-sm text-slate-600">分析兩個變數間的相關性 (正相關、負相關)。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('control', 'old')" data-tool="control">
+                                <td class="p-5 font-bold text-amber-700 text-lg">管制圖</td>
+                                <td class="p-5 text-sm text-slate-600">監控品質穩定性，確認指標是否有異常。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('histogram', 'old')" data-tool="histogram">
+                                <td class="p-5 font-bold text-amber-700 text-lg">直方圖</td>
+                                <td class="p-5 text-sm text-slate-600">觀察數據的分佈型態與偏向。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <!-- Right: Old QC Preview -->
+            <div class="lg:col-span-5">
+                <div id="preview-panel-old" class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 preview-box relative overflow-hidden">
+                    <div id="placeholder-old" class="flex-1 flex flex-col items-center justify-center text-center">
+                        <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                            <svg class="w-10 h-10 text-slate-300 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 002-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-400">請選擇舊手法工具</h3>
+                    </div>
+                    <div id="content-old" class="hidden opacity-0 flex-1 flex flex-col preview-content">
+                        <span id="tag-old" class="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4 w-fit bg-amber-100 text-amber-700">舊 QC 七手法</span>
+                        <h3 id="title-old" class="text-2xl font-black text-slate-800 mb-4 leading-tight"></h3>
+                        <div id="svg-old" class="w-full aspect-[16/9] bg-slate-50 rounded-2xl flex items-center justify-center mb-6 p-4 border border-slate-100 shadow-inner"></div>
+                        <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-lg mt-auto">
+                            <p id="desc-old" class="text-xs leading-relaxed text-slate-300"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新 QC 七手法區塊 (下) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Left: New QC 7 Tools Table -->
+            <div class="lg:col-span-7">
+                <section class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden h-full">
+                    <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-6">
+                        <h2 class="text-white font-bold text-2xl flex items-center text-left">
+                            <span class="bg-white/20 p-2 rounded-lg mr-3">💡</span> 
+                            新 QC 七手法 <span class="ml-3 text-blue-100 font-normal text-base opacity-90">(語言資料與規劃)</span>
+                        </h2>
+                    </div>
+                    <table class="w-full text-left border-collapse table-fixed">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-sm uppercase tracking-wider border-b border-slate-100">
+                                <th class="p-5 font-semibold w-[30%]">工具名稱</th>
+                                <th class="p-5 font-semibold w-[70%]">核心功能簡述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('affinity', 'new')" data-tool="affinity">
+                                <td class="p-5 font-bold text-indigo-700 text-lg">親和圖 (KJ法)</td>
+                                <td class="p-5 text-sm text-slate-600">歸納零散的想法、意見、敘述或語言資料，釐清之間的關係。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('relation', 'new')" data-tool="relation">
+                                <td class="p-5 font-bold text-indigo-700 text-lg">關聯圖</td>
+                                <td class="p-5 text-sm text-slate-600">分析複雜交錯的因果鏈結，找出核心環節。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('tree', 'new')" data-tool="tree">
+                                <td class="p-5 font-bold text-indigo-700 text-lg">系統圖</td>
+                                <td class="p-5 text-sm text-slate-600">透過樹狀結構逐層展開，找到最終的原因或方策。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('matrix', 'new')" data-tool="matrix">
+                                <td class="p-5 font-bold text-indigo-700 text-lg">矩陣圖</td>
+                                <td class="p-5 text-sm text-slate-600">將現象、原因、對策或評價等排列成矩陣形式，找出彼此相關程度的方法。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('pdpc', 'new')" data-tool="pdpc">
+                                <td class="p-5 font-bold text-indigo-700 text-lg">PDPC法</td>
+                                <td class="p-5 text-sm text-slate-600">預測計畫執行風險，預先制定應急對策。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('arrow', 'new')" data-tool="arrow">
+                                <td class="p-5 font-bold text-indigo-700 text-lg">箭頭圖 (PERT)</td>
+                                <td class="p-5 text-sm text-slate-600">規劃作業流程先後順序的工，掌握整個作業流程全貌及問題點。</td>
+                            </tr>
+                            <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('matrixdata', 'new')" data-tool="matrixdata">
+                                <td class="p-5 font-bold text-indigo-700 text-lg">矩陣數據分析</td>
+                                <td class="p-5 text-sm text-slate-600">分析三個變數以上之間的相關性(多變量分析)。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <!-- Right: New QC Preview -->
+            <div class="lg:col-span-5">
+                <div id="preview-panel-new" class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 preview-box relative overflow-hidden">
+                    <div id="placeholder-new" class="flex-1 flex flex-col items-center justify-center text-center">
+                        <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                            <svg class="w-10 h-10 text-slate-300 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-400">請選擇新手法工具</h3>
+                    </div>
+                    <div id="content-new" class="hidden opacity-0 flex-1 flex flex-col preview-content">
+                        <span id="tag-new" class="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4 w-fit bg-indigo-100 text-indigo-700">新 QC 七手法</span>
+                        <h3 id="title-new" class="text-2xl font-black text-slate-800 mb-4 leading-tight"></h3>
+                        <div id="svg-new" class="w-full aspect-[16/9] bg-slate-50 rounded-2xl flex items-center justify-center mb-6 p-4 border border-slate-100 shadow-inner"></div>
+                        <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-lg mt-auto">
+                            <p id="desc-new" class="text-xs leading-relaxed text-slate-300"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-20 border-t border-slate-200 pt-10 text-center text-slate-400 text-sm pb-10">
+            品管工具數位圖鑑互動系統 &copy; 2025 · 提升製程能力與改善思維的視覺化手冊
+        </footer>
+    </div>
+
+    <script>
+        const toolData = {
+            'pareto':  {
+                tag: '舊 QC 七手法', color: 'amber', title: '柏拉圖 (Pareto)',
+                desc: '掌握「重要少數」原則。實務應用中，應先處理累積百分比達 80% 的前幾大項目。若要讓改善效果立竿見影，這就是你的第一步。',
+                img: 'image/柏拉圖.png'
+            },
+            'fishbone': {
+                tag: '舊 QC 七手法', color: 'amber', title: '特性要因圖',
+                desc: '分析問題的「人、機、料、法、環」(5M1E)。不斷問「為什麼？」，展開各層次的小骨頭，直到找出的真因。',
+                img: 'image/fishbone.png' 
+            },
+            'checksheet': {
+                tag: '舊 QC 七手法', color: 'amber', title: '查檢表 (Check Sheet)',
+                desc: '不僅是打勾，關鍵在於「分類」。好的查檢表應能直接轉換成柏拉圖。設計時務必讓第一線人員方便標記，減少數據偏誤。',
+                img: 'image/檢核表.png' 
+            },
+            'stratification': {
+                tag: '舊 QC 七手法', color: 'amber', title: '層別法 (Stratification)',
+                desc: '當數據混雜在一起看不出規律時，可透過層別法找出問題點。',
+                img: 'image/層別法.png'
+            },
+            'scatter': {
+                tag: '舊 QC 七手法', color: 'amber', title: '散佈圖 (Scatter)',
+                desc: '代表原因的自變數放置X軸，代表結果的依變數則為Y軸。與矩陣數據分析差異在於，矩陣數據分析是分析三種以上的變數，而散佈圖則是分析兩種變數之間的關係。',
+                img: 'image/散佈圖.png'
+            },
+            'control': {
+                tag: '舊 QC 七手法', color: 'amber', title: '管制圖 (Control Chart)',
+                desc: '連續多點走升或單點跳出邊界，都是「異常變異」警訊。',
+                img: 'image/管制圖.png'
+            },
+            'histogram': {
+                tag: '舊 QC 七手法', color: 'amber', title: '直方圖 (Histogram)',
+                desc: '重點：直方圖與長條圖不太一樣；【直方圖】的柱狀間【不能】有空隙；長條圖的柱狀圖則是分開的。因此，長條圖主要是用於離散資料；直方圖則是連續資料',
+                img: 'image/直方圖.png'
+            },
+            'affinity': {
+                tag: '新 QC 七手法', color: 'indigo', title: '親和圖 (KJ法)',
+                desc: '打破固有思維。適用於問題模糊、不知從何下手的初期。將所有便利貼貼出來，讓團隊透過「感覺」將相似的分類，重新結構化問題。',
+                img: 'image/親和圖.png'
+            },
+            'relation': {
+                tag: '新 QC 七手法', color: 'indigo', title: '關聯圖',
+                desc: '分析複雜交錯的因果鏈結，找出核心環節。對於環環相扣的多個原因，關聯圖比魚骨圖更能展現動態的邏輯關係。',
+                img: 'image/關聯圖.png' 
+            },
+            'tree': {
+                tag: '新 QC 七手法', color: 'indigo', title: '系統圖',
+                desc: '可運用「why-why」法，找到真正原因。',
+                img: 'image/系統圖.png' 
+            },
+            'matrix': {
+                tag: '新 QC 七手法', color: 'indigo', title: '矩陣圖',
+                desc: '通常使用矩陣圖進行評價項目，計算出評價總分及優先順序',
+                img: 'image/矩陣圖.png'
+            },
+            'pdpc': {
+                tag: '新 QC 七手法', color: 'indigo', title: '過程決策計畫圖(PDPC)',
+                desc: '「防患未然」的劇本。',
+                desc: '圖中矩形代表【解決問題的方法】；圓角矩形為【預想可能的結果】；此外，常用菱形作為判斷過程',
+                img: 'image/過程決策計畫圖.png'
+            },
+            'arrow': {
+                tag: '新 QC 七手法', color: 'indigo', title: '箭頭圖',
+                desc: '若為「並行作業」時，則將同時上下排列中，如作業3、4；箭頭圖可使用「作業工作時間/總工作時間」，例如：作業1為7分鐘，而總工作時間為45分鐘，故表示「7/45」。',
+                img: 'image/箭頭圖.png'
+            },
+            'matrixdata': {
+                tag: '新 QC 七手法', color: 'indigo', title: '矩陣數據分析(主成分分析法)',
+                desc: '與散佈圖差異在於，矩陣數據分析是分析三種以上的變數，而散佈圖則是分析兩種變數之間的關係。使方法為多變量分析之一，建議具備相關數理基礎或統計軟體操作能力。',
+                img: 'image/矩陣數據分析圖.png'
+            }
+        };
+
+        // 獨立追蹤兩個區域的狀態
+        let lastOld = null;
+        let lastNew = null;
+
+        function updatePreview(toolKey, section) {
+            if ((section === 'old' && lastOld === toolKey) || (section === 'new' && lastNew === toolKey)) return;
+            
+            if (section === 'old') lastOld = toolKey;
+            else lastNew = toolKey;
+            
+            const data = toolData[toolKey];
+            const placeholder = document.getElementById(`placeholder-${section}`);
+            const content = document.getElementById(`content-${section}`);
+            const title = document.getElementById(`title-${section}`);
+            const svgContainer = document.getElementById(`svg-${section}`);
+            const desc = document.getElementById(`desc-${section}`);
+
+            content.classList.add('fade-out');
+            content.classList.remove('fade-in');
+
+            setTimeout(() => {
+                placeholder.classList.add('hidden');
+                content.classList.remove('hidden');
+                
+                title.innerText = data.title;
+                svgContainer.innerHTML = `<img src="${data.img}" alt="${data.title}" class="max-w-full max-h-full object-contain drop-shadow-md">`;
+                desc.innerText = data.desc;
+                
+                content.classList.remove('fade-out');
+                content.classList.add('fade-in');
+            }, 150);
+
+            // 更新左側表格列的高亮狀態
+            const container = section === 'old' ? '#old-qc-body' : 'tbody:not(#old-qc-body)';
+            document.querySelectorAll(`${container} .tool-row`).forEach(row => {
+                row.classList.remove('active-row');
+                if(row.getAttribute('data-tool') === toolKey) {
+                    row.classList.add('active-row');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

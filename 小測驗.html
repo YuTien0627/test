@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCC 知識挑戰 - 互動指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-pink': '#F472B6',
+                        'secondary-purple': '#A78BFA',
+                        'goal-green': '#34D399',
+                        'issue-red': '#F87171',
+                        'bg-paper': '#ecfdf5',
+                        'card-yellow': '#FFF9C4'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            font-family: 'Inter', 'Noto Sans TC', sans-serif; 
+            background-color: transparent; 
+            margin: 0;
+            padding: 0;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        
+        /* 繼承工具大禮包的卡片風格 */
+        .guide-card {
+            background-color: white;
+            border-radius: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #e2e8f0;
+        }
+        .guide-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #0d9488;
+        }
+
+        .answer-option {
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+            background: white;
+        }
+        .answer-option:hover:not(.disabled) {
+            transform: translateX(6px);
+            border-color: #0d9488;
+            background-color: #f0fdfa;
+        }
+        .disabled { pointer-events: none; }
+
+        /* 正確/錯誤動畫 */
+        .correct-blink { animation: correctBlink 0.5s ease-in-out 2; }
+        @keyframes correctBlink { 0%,100% {background-color:#d1fae5; border-color:#10b981;} 50% {background-color:#6ee7b7; border-color:#059669;} }
+        
+        .incorrect-shake { animation: incorrectShake 0.4s ease-in-out; }
+        @keyframes incorrectShake { 0%,100%{transform:translateX(0);} 20%,60%{transform:translateX(-6px);} 40%,80%{transform:translateX(6px);} }
+
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #last-updated-section { 
+            margin-top: 4rem;
+            padding-bottom: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-6 lg:p-10">
+
+    <div id="app" class="max-w-7xl mx-auto">
+        
+        <!-- 【區塊一：引導標頭】 -->
+        <div id="toolkit-header" class="max-w-3xl mx-auto text-center mb-10 fade-in">
+            <div class="inline-block px-4 py-1.5 mb-4 rounded-full bg-teal-100 text-teal-700 text-sm font-bold tracking-wide">
+                QCC QUIZ
+            </div>
+            <h2 id="mainTitle" class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 leading-tight">
+                🛠️ QCC 知識小測驗 🎯
+            </h2>
+            <p id="mainDesc" class="text-gray-600 text-sm">
+                本測驗旨在評估您對品管工具的瞭解程度，完成後將提供完整的「落點分析報告」。
+            </p>
+        </div>
+
+        <!-- 【區塊二：內容主體區】 -->
+        <div id="main-content-area" class="relative transition-all duration-500">
+            
+            <!-- [資料載入錯誤提示] - 當找不到 quizData.js 時顯示 -->
+            <div id="dataErrorScreen" class="hidden max-w-2xl mx-auto bg-white border-2 border-red-100 p-12 rounded-[2.5rem] shadow-xl text-center fade-in">
+                <div class="w-20 h-20 bg-red-50 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl">⚠️</div>
+                <h3 class="text-2xl font-black text-gray-800 mb-4">尚未偵測到題目數據</h3>
+                <p class="text-gray-500 mb-8 text-base leading-relaxed text-left bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                    目前系統正嘗試從外部檔案載入題目，請確保：<br>
+                    1. <span class="font-bold text-teal-600">quizData.js</span> 檔案已建立。<br>
+                    2. 該檔案與此 HTML 放在<span class="font-bold">同一個資料夾</span>。<br>
+                    3. 檔案內容必須正確導出數據（Export）。
+                </p>
+                <div class="flex flex-col gap-3">
+                    <button onclick="location.reload()" class="px-8 py-4 bg-teal-600 text-white rounded-2xl font-black hover:bg-teal-700 transition-all shadow-lg shadow-teal-100">
+                        🔄 重新整理並載入
+                    </button>
+                    <p class="text-xs text-gray-400">※ 提示：本頁面需在伺服器環境 (如 Live Server) 下方可載入模組檔案。</p>
+                </div>
+            </div>
+
+            <!-- [歡迎畫面 - 類型選擇] -->
+            <div id="welcomeScreen" class="fade-in px-2">
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    <div id="selectProblemType" class="guide-card p-10 cursor-pointer group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full -mr-16 -mt-16 transition-all group-hover:bg-teal-100"></div>
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-teal-600 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-teal-200">
+                                <span class="text-3xl">🧩</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">問題解決型</h3>
+                            <p class="text-gray-500 leading-relaxed mb-8 h-12">了解大家是否能正確掌握問題解決型 QCC 各步驟的概念與重點。</p>
+                            <div class="flex items-center text-teal-600 font-bold group-hover:translate-x-2 transition-transform">
+                                開始挑戰 →
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="selectSolutionType" class="guide-card p-10 cursor-pointer group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full -mr-16 -mt-16 transition-all group-hover:bg-indigo-100"></div>
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-indigo-200">
+                                <span class="text-3xl">💡</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">課題達成型</h3>
+                            <p class="text-gray-500 leading-relaxed mb-8 h-12">了解大家是否能正確理解課題達成型 QCC 各步驟的思考方向與應用方式。</p>
+                            <div class="flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform">
+                                開始挑戰 →
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- [測驗進度顯示] -->
+            <div id="progressSection" class="max-w-4xl mx-auto mb-8 hidden fade-in">
+                <div id="progressDisplay" class="flex justify-between items-end mb-2">
+                    <span class="text-sm font-bold text-teal-700">測驗進行中...</span>
+                    <span id="scoreBadge" class="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-bold shadow-sm">目前得分: 0 分</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden shadow-inner border border-gray-100">
+                    <div id="progressBar" class="bg-gradient-to-r from-teal-500 to-indigo-500 h-full transition-all duration-500" style="width:0%"></div>
+                </div>
+            </div>
+
+            <!-- [核心測驗卡片] -->
+            <div id="quizContainer" class="max-w-4xl mx-auto hidden fade-in">
+                <div class="bg-white rounded-[2.5rem] shadow-xl border border-gray-100 p-8 md:p-12 mb-8 relative">
+                    <p id="quizQuestion" class="text-2xl font-black text-gray-800 text-center mb-10 leading-relaxed">題目內容</p>
+                    <div id="quizOptions" class="grid grid-cols-1 gap-4"></div>
+                    
+                    <div id="quizFeedback" class="hidden mt-8 p-6 text-center rounded-2xl font-bold border-2 transition-all duration-300"></div>
+                    
+                    <button id="mainActionBtn" class="w-full mt-10 py-5 rounded-2xl bg-teal-600 text-white font-black text-xl shadow-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-95 shadow-teal-100">
+                        進行下一題
+                    </button>
+                </div>
+            </div>
+
+            <!-- [最終分析報告] -->
+            <div id="resultContainer" class="max-w-5xl mx-auto hidden fade-in"></div>
+
+        </div>
+
+        <!-- 頁尾 -->
+        <footer id="last-updated-section">
+            <div id="last-updated-text" class="text-slate-400 text-sm italic">最後更新時間：載入中…</div>
+            <p class="text-slate-300 text-xs mt-2 italic">QCC 知識評估系統 &copy; 2025 · 實踐品質卓越</p>
+        </footer>
+    </div>
+
+<script type="module">
+    // ===== 全域變數 =====
+    let PROBLEM_DATA = [];
+    let SOLUTION_DATA = [];
+    
+    let currentQuestions = [];
+    let currentQuestionIndex = -1;
+    let userScore = 0;
+    let quizInProgress = false;
+    let stepPerformance = {};
+    let selectedQuizType = 'problem';
+    let domRefs = {};
+
+    /**
+     * 核心優化：更安全地從外部檔案載入數據
+     */
+    async function loadQuizData() {
+        try {
+            // 處理相對路徑在 Blob 環境下的問題
+            let path = './quizData.js';
+            if (window.location.protocol === 'blob:') {
+                // 在預覽環境下，若無伺服器則無法讀取外部 JS 模組
+                throw new Error("BlobEnvironmentDetected");
+            }
+
+            const module = await import(`${path}?v=${Date.now()}`);
+            PROBLEM_DATA = module.PROBLEM_STEPS_DATA || [];
+            SOLUTION_DATA = module.SOLUTION_STEPS_DATA || [];
+            
+            if (PROBLEM_DATA.length === 0 && SOLUTION_DATA.length === 0) throw new Error("EmptyData");
+            
+            return true;
+        } catch (error) {
+            console.error("載入 quizData.js 失敗:", error.message);
+            // 顯示引導式的錯誤畫面
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('dataErrorScreen').classList.remove('hidden');
+            reportHeight();
+            return false;
+        }
+    }
+
+    // ===== 初始化應用程式 =====
+    async function initializeApp() {
+        domRefs = {
+            mainTitle: document.getElementById('mainTitle'),
+            mainDesc: document.getElementById('mainDesc'),
+            welcomeScreen: document.getElementById('welcomeScreen'),
+            progressSection: document.getElementById('progressSection'),
+            quizContainer: document.getElementById('quizContainer'),
+            quizQuestion: document.getElementById('quizQuestion'),
+            quizOptions: document.getElementById('quizOptions'),
+            quizFeedback: document.getElementById('quizFeedback'),
+            mainActionBtn: document.getElementById('mainActionBtn'),
+            progressBar: document.getElementById('progressBar'),
+            resultContainer: document.getElementById('resultContainer'),
+            scoreBadge: document.getElementById('scoreBadge')
+        };
+
+        const success = await loadQuizData();
+        if (!success) return;
+
+        currentQuestionIndex = -1;
+        userScore = 0;
+        quizInProgress = false;
+        stepPerformance = {};
+        
+        domRefs.mainTitle.innerHTML = '🛠️ QCC 知識小測驗 🎯';
+        domRefs.welcomeScreen.classList.remove('hidden');
+        domRefs.progressSection.classList.add('hidden');
+        domRefs.quizContainer.classList.add('hidden');
+        domRefs.resultContainer.classList.add('hidden');
+
+        document.getElementById('selectProblemType').onclick = () => startQuiz('problem');
+        document.getElementById('selectSolutionType').onclick = () => startQuiz('solution');
+
+        domRefs.mainActionBtn.onclick = handleMainAction;
+        
+        syncParentUI();
+        reportHeight();
+        updateTime();
+    }
+
+    // ===== 父頁面同步邏輯 =====
+    function syncParentUI() {
+        if (window.parent && window.parent !== window) {
+            // 安全跨網域通訊
+            window.parent.postMessage({
+                type: 'qcc-sync-ui',
+                navId: 'nav-btn-quiz',
+                showTabs: '', 
+                hideTabs: 'all'
+            }, '*');
+
+            try {
+                if (typeof window.parent.activateNav === 'function') {
+                    window.parent.activateNav('nav-btn-quiz');
+                }
+                const pToolTabs = window.parent.document.getElementById('tool-tabs');
+                const pFormatTabs = window.parent.document.getElementById('format-tabs');
+                if (pToolTabs) pToolTabs.classList.add('hidden');
+                if (pFormatTabs) pFormatTabs.classList.add('hidden');
+            } catch (e) {}
+
+            // 移除冗餘頁尾
+            const fs = document.getElementById('last-updated-section');
+            if (fs) fs.remove(); 
+        }
+    }
+
+    function reportHeight() {
+        if (window.parent && window.parent !== window) {
+            const h = document.body.scrollHeight;
+            window.parent.postMessage({ type: 'resize', height: h + 100 }, '*');
+            try {
+                const pFrame = window.parent.document.getElementById('content-frame');
+                if (pFrame) pFrame.style.height = (h + 100) + 'px';
+            } catch (e) {}
+        }
+    }
+
+    // ===== 測驗邏輯 =====
+    function startQuiz(quizType) {
+        selectedQuizType = quizType;
+        const data = quizType === 'problem' ? PROBLEM_DATA : SOLUTION_DATA;
+        currentQuestions = data.flatMap(s => s.quiz);
+        
+        if (currentQuestions.length === 0) {
+            alert("目前題庫為空，請檢查 quizData.js 內容。");
+            return;
+        }
+
+        domRefs.mainTitle.innerHTML = quizType === 'problem' ? '🧩 QCC 問題解決型挑戰' : '💡 QCC 課題達成型挑戰';
+        domRefs.mainDesc.innerHTML = '請依據實務經驗，選出最正確的答案。加油！';
+        
+        domRefs.welcomeScreen.classList.add('hidden');
+        domRefs.progressSection.classList.remove('hidden');
+        domRefs.quizContainer.classList.remove('hidden');
+        
+        currentQuestionIndex = 0;
+        quizInProgress = true;
+        displayQuestion();
+        reportHeight();
+    }
+
+    function displayQuestion() {
+        const q = currentQuestions[currentQuestionIndex];
+        const total = currentQuestions.length;
+        const current = currentQuestionIndex + 1;
+        
+        domRefs.progressBar.style.width = `${(current/total)*100}%`;
+        domRefs.quizQuestion.innerHTML = `<span class="text-teal-600 font-bold mb-2 block">[${q.step}]</span>${q.question}`;
+        domRefs.quizOptions.innerHTML = '';
+        
+        q.options.forEach((opt, idx) => {
+            const el = document.createElement('div');
+            el.className = 'answer-option p-5 rounded-2xl flex items-center text-lg font-bold text-gray-700 shadow-sm';
+            el.innerHTML = `<span class="inline-flex items-center justify-center w-10 h-10 bg-teal-50 text-teal-700 rounded-full mr-4 border-2 border-teal-100 font-black">${String.fromCharCode(65+idx)}</span> ${opt}`;
+            el.dataset.index = idx;
+            el.onclick = () => selectAnswer(idx, el, q);
+            domRefs.quizOptions.appendChild(el);
+        });
+        
+        domRefs.quizFeedback.classList.add('hidden');
+        domRefs.mainActionBtn.disabled = true;
+        domRefs.mainActionBtn.textContent = '請先選擇答案';
+        reportHeight();
+    }
+
+    function selectAnswer(idx, el, q) {
+        const correct = idx === q.correctAnswerIndex;
+        domRefs.quizOptions.querySelectorAll('.answer-option').forEach(opt => opt.classList.add('disabled', 'opacity-50'));
+        
+        const stepName = q.step;
+        if (!stepPerformance[stepName]) stepPerformance[stepName] = { correct:0, total:0 };
+        stepPerformance[stepName].total++;
+
+        if(correct){
+            userScore++;
+            stepPerformance[stepName].correct++;
+            el.classList.remove('opacity-50');
+            el.classList.add('correct-blink', 'border-teal-500', 'bg-teal-50');
+            domRefs.quizFeedback.innerHTML = `🎉 答對了！ ${q.feedback_correct || ""}`;
+            domRefs.quizFeedback.className = "mt-8 p-6 text-center rounded-2xl font-bold border-2 bg-teal-50 text-teal-700 border-teal-500 fade-in";
+        } else {
+            el.classList.remove('opacity-50');
+            el.classList.add('incorrect-shake', 'border-red-500', 'bg-red-50');
+            const correctEl = domRefs.quizOptions.querySelector(`[data-index="${q.correctAnswerIndex}"]`);
+            if(correctEl) {
+                correctEl.classList.remove('opacity-50');
+                correctEl.classList.add('border-teal-500', 'bg-teal-50');
+            }
+            domRefs.quizFeedback.innerHTML = `❌ 答錯了... ${q.feedback_incorrect || ""}`;
+            domRefs.quizFeedback.className = "mt-8 p-6 text-center rounded-2xl font-bold border-2 bg-red-50 text-red-700 border-red-500 fade-in";
+        }
+
+        domRefs.scoreBadge.textContent = `目前得分: ${userScore} 分`;
+        domRefs.quizFeedback.classList.remove('hidden');
+        domRefs.mainActionBtn.disabled = false;
+        domRefs.mainActionBtn.textContent = currentQuestionIndex < currentQuestions.length-1 ? '繼續下一題 →' : '查看最終分析報告！';
+        reportHeight();
+    }
+
+    function handleMainAction(){
+        if(currentQuestionIndex < currentQuestions.length - 1){
+            currentQuestionIndex++; 
+            displayQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults(){
+        domRefs.quizContainer.classList.add('hidden');
+        domRefs.progressSection.classList.add('hidden');
+        domRefs.resultContainer.classList.remove('hidden');
+        domRefs.mainTitle.innerHTML = "🏁 測驗結果分析報告";
+        
+        const total = currentQuestions.length;
+        const percent = Math.round((userScore/total)*100);
+        const data = selectedQuizType === 'problem' ? PROBLEM_DATA : SOLUTION_DATA;
+
+        let analysisHTML = `<div class="grid gap-4 mt-8">`;
+        data.forEach(step => {
+            const perf = stepPerformance[step.name] || {correct:0, total:0};
+            const accuracy = perf.total > 0 ? (perf.correct / perf.total * 100) : 0;
+            let icon = '🟢', rowCls = 'bg-white border-teal-100';
+            if(accuracy < 50){ icon='🔴'; rowCls='bg-white border-red-100'; } 
+            else if(accuracy < 100){ icon='🟡'; rowCls='bg-white border-amber-100'; }
+            
+            analysisHTML += `
+                <div class="flex items-center justify-between p-5 rounded-2xl border-2 ${rowCls} shadow-sm">
+                    <div class="flex items-center">
+                        <span class="mr-4 text-2xl">${icon}</span>
+                        <span class="font-bold text-gray-700">${step.id}. ${step.name}</span>
+                    </div>
+                    <span class="font-black text-gray-600 text-lg">${accuracy.toFixed(0)}%</span>
+                </div>
+            `;
+        });
+        analysisHTML += '</div>';
+
+        domRefs.resultContainer.innerHTML = `
+            <div class="bg-white rounded-[2.5rem] shadow-xl border border-gray-100 p-8 md:p-12 text-center mb-8">
+                <div class="text-7xl font-black text-gray-800 mb-2">${userScore} / ${total}</div>
+                <div class="text-sm font-bold text-teal-600 tracking-widest uppercase mb-10">Final Score Report</div>
+                
+                <h3 class="text-xl font-bold text-gray-800 mb-2 text-left flex items-center">
+                    <span class="mr-2">🧠</span> 各步驟知識弱點分析
+                </h3>
+                <p class="text-left text-gray-400 text-xs mb-4">顏色代表熟悉程度：綠(優)、黃(平)、紅(需補強)</p>
+                ${analysisHTML}
+                <button onclick="location.reload()" class="w-full mt-12 py-5 rounded-2xl bg-teal-600 text-white font-black text-xl shadow-lg hover:bg-teal-700 transition-all shadow-teal-100">
+                    🔄 重新開始挑戰
+                </button>
+            </div>
+        `;
+        reportHeight();
+    }
+
+    async function updateTime() {
+        const el = document.getElementById('last-updated-text');
+        if(!el) return;
+        try {
+            const res = await fetch(`https://api.github.com/repos/YuTien0627/QCC/commits?per_page=1`);
+            if(res.ok){
+                const data = await res.json();
+                const d = new Date(data[0].commit.committer.date);
+                el.textContent = "最後更新時間：" + d.toLocaleString('zh-TW', {hour12:false}).replace(/\//g,'-');
+            }
+        } catch(e) {}
+    }
+
+    // 啟動
+    window.addEventListener('load', initializeApp);
+    window.addEventListener('resize', reportHeight);
+    setInterval(reportHeight, 1500);
+
+</script>
+</body>
+</html>

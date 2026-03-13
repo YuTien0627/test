@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCC報告書撰寫攻略 - 課題達成型</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 字體與背景，貼齊「問題型」頁面風格 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ecfdf5; /* 跟問題型一樣的淡綠底 */
+        }
+        /* 頁首風格：白底卡片＋上方青色粗條 */
+        .header-card {
+            background-color: #ffffff;
+            border-top: 8px solid #0d9488; /* teal-600 */
+            border-radius: 1rem;
+            box-shadow: 0 20px 35px -18px rgba(15, 23, 42, 0.45);
+        }
+        /* 左側步驟列表卡片 */
+        .step-nav-card {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+        .step-nav-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.35);
+        }
+        .step-nav-card.active {
+            background-color: #ecfeff; /* teal-50 */
+            border-left-color: #0d9488;
+        }
+        .step-nav-card.active h3 {
+            color: #0d9488;
+        }
+        /* 右側內容外框：白色卡片＋陰影＋左側彩色條 */
+        .step-panel-shell {
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 45px -18px rgba(15, 23, 42, 0.45);
+            background-color: #ffffff;
+        }
+
+        /* 小小標題樣式，呼應左側色條感 */
+        .sub-section-title {
+            border-left: 6px solid #0d9488;
+            padding-left: 0.75rem;
+        }
+
+        /* 案例卡片樣式 (新增) */
+        .case-item { transition: all 0.3s ease; border-left: 4px solid #ef4444; }
+        .case-item:hover { background-color: #fef2f2; transform: translateX(5px); }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .animate-slideDown {
+            animation: slideDown 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+<div class="min-h-screen py-6 sm:py-10">
+    <!-- 標題區塊 -->
+    <header class="header-card max-w-5xl mx-auto px-4 py-8 mb-8">
+        <div class="text-center">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">
+                🚀 QCC 報告書撰寫攻略
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-500">
+                課題達成型 10 大步驟拆解，搭配寫作小撇步，讓你的報告書既專業又吸睛！
+            </p>
+        </div>
+    </header>
+
+    <!-- 主要內容 -->
+    <main class="max-w-6xl mx-auto px-4 pb-10 space-y-6">
+
+        <!-- 報告書格式下載區塊 (已修改為紅色系) -->
+        <section class="bg-white p-5 sm:p-8 rounded-xl shadow-lg border-l-8 border-red-500">
+            <div class="flex flex-col gap-6">
+                <!-- 文字說明區 -->
+                <div class="text-center md:text-left">
+                    <h2 class="text-2xl font-bold text-red-700 mb-3 flex items-center justify-center md:justify-start">
+                        <span class="mr-2 text-3xl">📖</span> 報告書格式下載
+                    </h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        在開始撰寫之前，請先下載標準格式。課題達成型與問題解決型在步驟架構上有顯著差異，
+                        請務必確認下載的版本為 <span class="text-red-600 font-bold">「課題達成型」</span>。
+                        下方提供空白格式與優秀案例供參考：
+                    </p>
+                </div>
+
+                <!-- 按鈕區：使用 grid 並設為 3 欄位，讓按鈕平均分散並填滿寬度 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="https://YuTien0627.github.io/QCC/總院-品安委-活動-4-00002-品質提升活動成果報告書-課題達成型-01版.docx"
+                       download
+                       class="inline-flex items-center justify-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95 text-center">
+                        <span class="mr-2 text-xl">📥</span>
+                        成果報告書－課題達成型
+                    </a>
+                    </a>
+                    <a href="https://YuTien0627.github.io/QCC/相關檔案/附件7.3_品質提升活動會議記錄表.docx"
+                       class="inline-flex items-center justify-center px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-xl shadow-sm transition-all active:scale-95 text-center">
+                        <span class="mr-2 text-xl">📝</span> 會議記錄及簽到單格式
+                    </a>
+                    <button onclick="toggleCaseGallery()" 
+                       class="inline-flex items-center justify-center px-6 py-3 bg-white border-2 border-red-600 text-red-600 hover:bg-red-50 font-bold rounded-xl shadow-sm transition-all active:scale-95 text-center">
+                        <span class="mr-2 text-xl">💡</span>
+                        院內改善案例參考
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 新手提醒 -->
+        <section class="bg-yellow-50 p-5 sm:p-6 rounded-xl shadow-md border-l-8 border-yellow-400">
+            <p class="text-gray-800 text-base sm:text-lg text-center leading-relaxed">
+                💡 <span class="font-semibold text-yellow-700">新手小提醒：</span>
+                課題達成型 QCC 報告書一樣是團隊的英雄故事，<br class="hidden sm:inline">
+                左邊先選擇 <span class="font-bold text-teal-600">「第幾步」</span>，右邊就會出現對應的撰寫攻略與常見陷阱，
+                跟著一步一步完成，就能搭出一份有架構又有亮點的作品！
+            </p>
+        </section>
+
+  <!-- AI 連結區塊 -->
+<section class="bg-blue-50 p-6 rounded-xl shadow-md border-l-8 border-blue-500">
+    <div class="flex flex-col gap-4 text-center md:text-left">
+        
+        <!-- 標題 -->
+        <h2 class="text-2xl font-bold text-blue-700 flex items-center justify-center md:justify-start">
+            <span class="mr-2 text-3xl">🤖</span>
+            AI 輔助撰寫工具
+        </h2>
+
+        <!-- 說明文字 + 按鈕（同一列） -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+            <!-- 說明文字（桌機不換行） -->
+            <p class="text-gray-600 text-sm md:whitespace-nowrap">
+                點擊右方按鈕，即可直接開啟「奇美品質改善小幫手」，由 AI 協助你釐清邏輯、撰寫與優化成果報告書。
+            </p>
+
+            <!-- 按鈕（綠藍漸層） -->
+            <a href="https://chatgpt.com/g/g-695229fefa348191a7819c7a947ce193-qi-mei-pin-zhi-gai-shan-xiao-bang-shou"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center justify-center gap-3
+                      px-6 py-3 shrink-0
+                      bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500
+                      text-white text-base font-semibold rounded-full
+                      shadow-lg hover:from-emerald-600 hover:via-teal-600 hover:to-blue-600
+                      hover:shadow-xl transition-all active:scale-[0.97]">
+
+                <span class="text-xl">✨</span>
+                開啟 AI 品質改善小幫手
+            </a>
+
+        </div>
+    </div>
+</section>
+
+        <!-- 兩欄式布局：左側步驟列表 + 右側詳情內容（架構與問題型相同） -->
+        <section class="grid lg:grid-cols-3 gap-6 items-start">
+            <!-- 左側：十個步驟任務列表 -->
+            <aside class="lg:col-span-1 bg-white rounded-2xl shadow-lg p-4 sm:p-5 border border-teal-50">
+                <div class="flex items-center mb-3">
+                    <span class="text-2xl mr-2">📚</span>
+                    <h2 class="text-xl font-extrabold text-gray-800">課達型步驟清單</h2>
+                </div>
+                <p class="text-xs text-gray-500 mb-4">
+                    建議依序完成，也可以針對卡關的步驟單獨點開查看撰寫提示。
+                </p>
+
+                <div class="space-y-2">
+                    <div class="step-nav-card active rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="1">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            1. 主題選定 (Theme Selection)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="2">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            2. 活動計劃擬訂 (Activity Planning)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="3">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            3. 課題明確化 (Problem Clarification)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="4">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            4. 目標設定 (Target Setting)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="5">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            5. 方策擬訂 (Strategy Formulation)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="6">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            6. 最適策追究 (Optimal Strategy Pursuit)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="7">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            7. 最適策實施與檢討 (Implementation & Review)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="8">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            8. 效果確認 (Effect Confirmation)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="9">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            9. 標準化 (Standardization)
+                        </h3>
+                    </div>
+
+                    <div class="step-nav-card rounded-xl px-4 py-3 flex items-center bg-white"
+                         data-step-btn="10">
+                        <h3 class="font-semibold text-gray-800 text-sm sm:text-base">
+                            10. 檢討與改進 (Review & Improvement)
+                        </h3>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 右側：對應步驟內容區（一次只顯示一個，三塊垂直堆疊） -->
+            <section class="lg:col-span-2">
+                <div class="step-panel-shell border-l-8 border-teal-500 p-6 sm:p-8 space-y-8">
+
+                    <!-- Step 1 -->
+                    <div data-step-panel="1">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：主題選定 (Theme Selection)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-amber-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>說明主題來源（臨床困擾、上級方針、現況不滿足、新規業務）</li>
+                                <li>主題命名需符合：動詞＋名詞＋衡量指標</li>
+                                <li>清楚交代「為什麼現在要做這個主題」（重要性、急迫性)</li>
+                                <li>判定為「課題達成型」的理由（非單純解決既有問題）</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>QC STORY 判定表</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>主題像「對策」而非「課題」（如：導入XX系統）</li>
+                                <li>沒有衡量指標，只寫口號式標題</li>
+                                <li>主題過大、無法在活動期間完成</li>
+                                <li>明明是問題型，卻硬套課題達成型</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div data-step-panel="2" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：活動計劃擬訂 (Activity Planning)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-sky-50 border border-sky-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-sky-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>依課題達成型 PDCA 流程，規劃從主題選定到標準化與檢討的完整時程</li>
+                                <li>建議以甘特圖呈現，清楚標示 WHAT, WHEN, HOW, WHO, WHERE</li>
+                                <li>區分「計畫線」與「實施線」，方便後續比較計畫與實際進度差異</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>甘特圖 (Gantt Chart)：視覺化呈現各步驟預計開始與結束時間</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>計畫過於理想，未考量臨床工作量與人力負荷</li>
+                                <li>未區分計畫線與實施線，無法檢視進度落差</li>
+                                <li>未明確標出負責人與資源，導致權責不清與執行困難</li>
+                                <li>進度表流於形式，與實際執行不符</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div data-step-panel="3" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：課題明確化 (Problem Clarification)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-pink-50 border border-pink-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-pink-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>說明「掌握項目」來源（顧客、流程、4M等）</li>
+                                <li>量化現況水準與期望水準</li>
+                                <li>透過望差值（期望水準 - 現況水準）來確認最需要解決的「攻堅點」</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>攻堅點評選表</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>望差值計算錯誤或期望水準缺乏文獻、標竿等依據</li>
+                                <li>攻堅點的選擇未以數據與邏輯支持，僅憑主觀感覺</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div data-step-panel="4" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：目標設定 (Target Setting)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-amber-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>目標值設定需有可靠依據，例如標竿醫院數據、專業學會建議或實證文獻</li>
+                                <li>可使用 SMART 原則：具體、可衡量、可達成、相關、有時限</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>SMART 原則：確認目標設定是否合理且具挑戰性</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>目標僅寫「大幅改善」、「明顯降低」，缺乏具體數字</li>
+                                <li>目標值憑空想像，未說明推算依據。</li>
+                                <li>目標與現況差距過小（沒有突破）或目標過高無法達成</li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div data-step-panel="5" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：方策擬訂 (Strategy Formulation)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-indigo-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>針對選定的攻堅點，使用腦力激盪發想多個解決策略（方策）</li>
+                                <li>使用「方策效果評估表」，從重要性、安全性、效益性等面向評估</li>
+                                <li>選擇評價總分較高的方策，作為後續追究與執行的主要方案</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>腦力激盪法 (Brainstorming)：廣泛發想各種改善策略</li>
+                                <li>評估矩陣 / 決策表：根據多項指標為各方策評分比較</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>方策與課題點或攻堅點關聯度不高，容易治標不治本</li>
+                                <li>方策無法量化</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div data-step-panel="6" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：最適策追究 (Optimal Strategy Pursuit)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-rose-50 border border-rose-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-rose-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>針對選定的方策，預先分析實施過程中可能出現的「障礙」與「副作用」</li>
+                                <li>提出消除或降低障礙與副作用的具體方法，形成「成功劇本」</li>
+                                <li>將確認後的最適策具體化：誰、何時、何地、如何執行</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>矩陣圖</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>只選「最好做的」，不是「最有效的」</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 7 -->
+                    <div data-step-panel="7" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：最適策實施與檢討 (Implementation & Review)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-emerald-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>依照具體化形成表，確實執行計畫</li>
+                                <li>確認對策執行情形（過程面指標），檢視實施的結果與達成率</li>
+                                <li>實施後進行檢討，整理優點與缺點，決定對策處置（是否列入標準或需要再對策）</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>PDCA </li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>D：沒詳細寫「怎麼做」</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 8 -->
+                    <div data-step-panel="8" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：效果確認 (Effect Confirmation)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-purple-50 border border-purple-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-purple-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>收集改善中與改善後的數據，繪製條形圖或推移圖與目標值比較（有形成果）</li>
+                                <li>計算目標達成率與進步率，附加效益可換算為金額或時間成本節省</li>
+                                <li>整理「無形成果」，如團隊合作、QC 手法運用能力等，可用雷達圖呈現</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>推移圖 (Run Chart) / 條形圖：比較改善前後指標變化</li>
+                                <li>雷達圖 (Radar Chart)：呈現圈員在各能力面向的成長</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>追蹤期間過短，只看到短期變化，無法證明長期穩定</li>
+                                <li>數據呈現方式不夠清晰或圖表選擇不當</li>
+                                <li>忽略無形成果，無法凸顯團隊與個人的成長</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 9 -->
+                    <div data-step-panel="9" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：標準化 (Standardization)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-slate-800 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>將確認有效的對策納入標準作業流程（SOP）或相關規範</li>
+                                <li>如何納入日常管理</li>
+                               
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>標準作業書 (SOP)：將成功作法文件化、制度化</li>
+                                <li>如何納入日常管理</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>未依正式程序修改 SOP 或規範，導致標準化缺乏法律或制度效力。</li>
+                                <li>標準化後未規劃教育訓練與成效追蹤，導致執行品質不一。</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 10 -->
+                    <div data-step-panel="10" class="hidden">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+                            步驟詳情：檢討與改進 (Review & Improvement)
+                        </h2>
+
+                        <!-- 撰寫重點 -->
+                        <div class="bg-slate-50 border border-slate-300 rounded-xl p-4 sm:p-5 mb-4">
+                            <h3 class="sub-section-title text-lg font-bold text-slate-900 mb-3 flex items-center">
+                                <span class="mr-2 text-2xl">💡</span> 撰寫重點 (Key Points)
+                            </h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>依活動步驟全面性檢討優點、缺點和未來努力方向。</li>
+                                <li>整理本期仍未解決的殘留問題，規劃後續改善計畫。</li>
+                                <li>決定下一期活動的主題，持續推動品質改善。</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常用品管手法 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-teal-50 border border-teal-100 mb-4">
+                            <h3 class="text-base sm:text-lg font-semibold text-teal-700 mb-2">🛠️ 常用品管手法 (QC Tools)</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-1 text-sm sm:text-base">
+                                <li>活動檢討一覽表：逐步記錄每一階段的檢討與建議</li>
+                                <li>殘留問題表：整理尚未完成或需要長期追蹤的改善項目</li>
+                            </ul>
+                        </div>
+
+                        <!-- 常見錯誤 -->
+                        <div class="p-4 sm:p-5 rounded-xl bg-rose-50 border border-rose-100">
+                            <h3 class="text-base sm:text-lg font-semibold text-rose-700 mb-2">❌ 常見錯誤 (Common Mistakes)</h3>
+                            <ul class="list-disc ml-5 text-rose-600 space-y-1 text-sm sm:text-base">
+                                <li>檢討流於形式，未依步驟全面性進行。</li>
+                                <li>未能客觀分析失敗原因，將責任歸咎於外部因素。</li>
+                                <li>未將殘留問題轉為下一期主題的具體規劃。</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+
+<div id="case-gallery-modal" class="fixed inset-0 z-[10001] hidden items-start justify-center bg-black/60 backdrop-blur-sm p-4 pt-10">
+    <div class="bg-white w-full max-w-4xl h-auto max-h-[85vh] rounded-2xl shadow-2xl flex flex-col relative animate-[slideDown_0.3s_ease-out]">
+        <div class="flex items-center justify-between p-6 border-b border-red-100 bg-red-50 rounded-t-2xl">
+            <h3 class="text-2xl font-bold text-red-800 flex items-center"><span class="mr-2 font-normal">📂</span> 院內改善案例參考</h3>
+            <button onclick="toggleCaseGallery()" class="text-4xl text-gray-400 hover:text-red-600 transition-colors">&times;</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2024年</span>
+                        <span class="text-gray-400 text-xs">課題達成型</span>
+                        <span class="flex items-center bg-teal-100 text-teal-800 text-[10px] px-2 py-0.5 rounded border border-teal-300 font-bold shadow-sm">
+                           <span class="mr-1">🎖️</span> 2025年醫策會NHQA_佳作
+                        </span>
+                        <span class="flex items-center bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded border border-yellow-300 font-bold shadow-sm">
+                            <span class="mr-1">🏆</span> 2025年中衛競賽_金塔獎
+                        </span>
+                        <span class="flex items-center bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded border border-yellow-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2025年醫品協會_金品獎
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">急診醫學部【急品圈安老組】建構在宅急症照護模式：開創超高齡照護的新潮流</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">#新規業務</span>
+                        <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">#挑戰魅力品質</span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型】2025NHQA佳作.中衛金.醫品金-建構在宅急症照護模式：開創超高齡照護的新潮流(急品圈安老組)20251008final.pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">
+                        <span class="mr-2">🔍</span> 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2024年</span>
+                        <span class="text-gray-400 text-xs">課題達成型</span>
+                        <span class="flex items-center bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 rounded border border-orange-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2025年醫策會NHQA_銅獎
+                        </span>
+                        <span class="flex items-center bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 rounded border border-orange-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2025年中衛競賽_銅塔獎
+                        </span>
+                        <span class="flex items-center bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 rounded border border-orange-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2025年醫品協會_菁英銅品獎
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">加護醫學部【救生圈】整合中西醫治療模式 縮短急性呼吸衰竭插管病人復原時間</h4>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型】2025NHQA銅.中衛銅.醫品銅-整合中西醫治療模式 縮短急性呼吸衰竭插管病人復原時間(救生圈)20251008final.pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">🔍 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2023年</span>
+                        <span class="text-gray-400 text-xs">課題達成型</span>
+                        <span class="flex items-center bg-teal-100 text-teal-800 text-[10px] px-2 py-0.5 rounded border border-teal-300 font-bold shadow-sm">
+                           <span class="mr-1">🎖️</span> 2024年醫策會NHQA_佳作
+                        </span>
+                        <span class="flex items-center bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded border border-yellow-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2024年中衛競賽_金塔獎
+                        </span>
+                        <span class="flex items-center bg-teal-100 text-teal-800 text-[10px] px-2 py-0.5 rounded border border-teal-300 font-bold shadow-sm">
+                           <span class="mr-1">🎖️</span> 2025年醫管學會_佳作
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">急診醫學部【急品圈安老組】提升急診高齡病人出院準備服務成效</h4>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型】2024NHQA佳作.中衛金.2025醫管佳作-提升急診高齡病人出院準備服務成效(急品圈安老組)20250521final.pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">🔍 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2022年</span>
+                        <span class="text-gray-400 text-xs">課題達成型+風險危害分析</span>
+                        <span class="flex items-center bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 rounded border border-slate-300 font-bold shadow-sm">
+                            <span class="mr-1">🏆</span> 2023年醫策會NHQA/中衛競賽_銀獎
+                        </span>
+                        <span class="flex items-center bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded border border-yellow-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2023年醫品協會_金品獎
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">加護醫學部【救生圈】提升急性呼吸衰竭病人拔管後吞嚥功能暨預防吸入性肺炎發生</h4>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型+風險危害分析】2023醫策會NHQA銀獎.中衛銀.醫品金-提升急性呼吸衰竭病人拔管後吞嚥功能暨預防吸入性肺炎發生(救生圈).pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">🔍 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2022年</span>
+                        <span class="text-gray-400 text-xs">課題達成型</span>
+                        <span class="flex items-center bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 rounded border border-orange-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2023年中衛競賽_銅塔獎
+                        </span>
+                        <span class="flex items-center bg-teal-100 text-teal-800 text-[10px] px-2 py-0.5 rounded border border-teal-300 font-bold shadow-sm">
+                           <span class="mr-1">🎖️</span> 2024年醫管學會_佳作
+                        </span>
+
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">急診醫學部【急品圈安老組】提升具社會支持系統需求之高齡急診待床病人轉銜照護品質</h4>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型】2023中衛銅.醫品優選-提升具社會支持系統需求之高齡急診待床病人轉銜照護品質(0927final).pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">🔍 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2021年</span>
+                        <span class="text-gray-400 text-xs">課題達成型</span>
+                        <span class="flex items-center bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 rounded border border-orange-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2022年醫策會NHQA_銅獎
+                        </span>
+                        <span class="flex items-center bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 rounded border border-slate-300 font-bold shadow-sm">
+                            <span class="mr-1">🏆</span> 2022年中衛競賽_銀塔獎
+                        </span>
+                        <span class="flex items-center bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 rounded border border-slate-300 font-bold shadow-sm">
+                            <span class="mr-1">🏆</span> 2022年醫品協會_銀品獎
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">心臟血管內科【強心圈】運用精準醫療提升COVID-19疫情下心臟衰竭照護成效</h4>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型】2022醫策會NHQA銅.中衛銀.醫品銀-運用精準醫療提升COVID-19疫情下心臟衰竭照護成效(強心圈)20221004final.pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">🔍 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2020年</span>
+                        <span class="text-gray-400 text-xs">課題達成型</span>
+                        <span class="flex items-center bg-teal-100 text-teal-800 text-[10px] px-2 py-0.5 rounded border border-teal-300 font-bold shadow-sm">
+                           <span class="mr-1">🎖️</span> 2021年醫策會NHQA_佳作
+                        </span>
+                        <span class="flex items-center bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 rounded border border-orange-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2021年中衛競賽_銅塔獎
+                        </span>
+                        <span class="flex items-center bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded border border-yellow-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2021年醫品協會_金品獎
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">急診醫學部【急品圈安老組】提高急診高齡病人譫妄症之診斷率及預後</h4>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型】2021NHQA佳作.中衛銅.醫品金-提高急診高齡病人譫妄症之診斷率及預後(急品圈安老組)20211006.pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">🔍 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2019年</span>
+                        <span class="text-gray-400 text-xs">課題達成型</span>
+                        <span class="flex items-center bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 rounded border border-orange-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2020年醫策會NHQA_銅獎
+                        </span>
+                        <span class="flex items-center bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 rounded border border-slate-300 font-bold shadow-sm">
+                            <span class="mr-1">🏆</span> 2020年中衛競賽_銀塔獎
+                        </span>
+                        <span class="flex items-center bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 rounded border border-slate-300 font-bold shadow-sm">
+                            <span class="mr-1">🏆</span> 2024年醫品協會_銀品獎
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">護理部5CI【CEOs二圈】提升內科加護病房病人失禁性皮膚炎之照護品質</h4>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型】2020NHQA銅.中衛銀.醫品銀-提升內科加護病房病人失禁性皮膚炎之照護品質(CEOs二圈).pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">🔍 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded font-bold">2019年</span>
+                        <span class="text-gray-400 text-xs">課題達成型</span>
+                        <span class="flex items-center bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 rounded border border-slate-300 font-bold shadow-sm">
+                            <span class="mr-1">🏆</span> 2020年醫策會NHQA/2021年醫管學會_銀獎
+                        </span>
+                        <span class="flex items-center bg-orange-100 text-orange-800 text-[10px] px-2 py-0.5 rounded border border-orange-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2020年中衛競賽_銅塔獎
+                        </span>
+                        <span class="flex items-center bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded border border-yellow-300 font-bold shadow-sm">
+                           <span class="mr-1">🏆</span> 2020年醫品協會_金品獎
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">藥劑部【藥帶圈】透過連續性藥物整合照護減少住院病人的用藥疏失</h4>
+                </div>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/課題達成型/【課題達成型】2020NHQA銀.中衛銅.醫品金.醫管銀-透過連續性藥物整合照護減少住院病人的用藥疏失(藥帶圈)20210413.pdf" target="_blank" class="w-full md:w-auto px-4 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center">🔍 預覽下載
+                    </a>
+                </div>
+            </div>
+
+            </div>
+        <div class="p-4 bg-gray-50 text-center text-xs text-gray-400 rounded-b-2xl">
+            提示：點擊「預覽下載」將在新分頁開啟檔案，您可利用該頁面右上角圖示進行存檔。
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * 步驟切換邏輯
+ */
+(function () {
+    const navCards = document.querySelectorAll('[data-step-btn]');
+    const panels   = document.querySelectorAll('[data-step-panel]');
+    if (!navCards.length || !panels.length) return;
+
+    function activateStep(stepId) {
+        navCards.forEach(card => {
+            card.classList.toggle('active', card.dataset.stepBtn === stepId);
+        });
+
+        panels.forEach(panel => {
+            panel.classList.toggle('hidden', panel.dataset.stepPanel !== stepId);
+        });
+
+        if (window.innerWidth < 1024) {
+            const target = document.querySelector('[data-step-panel="' + stepId + '"]');
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    navCards.forEach(card => {
+        card.addEventListener('click', () => activateStep(card.dataset.stepBtn));
+    });
+
+    activateStep('1');
+})();
+
+/**
+ * 案例視窗開關邏輯 (新增)
+ */
+function toggleCaseGallery() {
+    const modal = document.getElementById('case-gallery-modal');
+    const isHidden = modal.classList.contains('hidden');
+    modal.classList.toggle('hidden', !isHidden);
+    modal.classList.toggle('flex', isHidden);
+    document.body.style.overflow = isHidden ? 'hidden' : 'auto';
+}
+</script>
+
+</body>
+</html>

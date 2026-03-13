@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCC 新手入門參考資源</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        body {
+            background-color: #ecfdf5;
+        }
+        .section-title {
+            border-left: 6px solid #0D9488;
+            padding-left: 0.75rem;
+        }
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3 rgba(0,0,0,0.1), 0 4px 6px -2 rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+
+<div class="max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden transform transition duration-500 hover:shadow-3xl border-t-8 border-teal-600">
+    <header class="bg-gradient-to-r from-teal-500 to-teal-400 text-white p-6 sm:p-8 md:p-10 shadow-lg">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
+            🏆 QCC 新手起跑線：資源百寶箱
+        </h1>
+        <p class="mt-1 text-sm sm:text-base md:text-lg font-medium text-teal-50">
+            歡迎加入品管圈！這裡有您需要的影音課程、講義及外部案例，陪您從新手變高手。
+        </p>
+        <p class="mt-3 inline-flex items-center text-xs sm:text-sm bg-white px-3 py-0.5 rounded-lg text-teal-800 shadow-sm">
+            <span class="mr-1">✨</span>
+            建議搭配首頁「QCC 新手入門互動指南」一起使用
+        </p>
+    </header>
+
+    <!-- Tabs Navigation -->
+    <div class="border-b border-gray-200 bg-white z-10">
+        <nav class="flex flex-wrap gap-2 sm:space-x-6 p-4 sm:p-5 items-center" aria-label="Tabs" id="tabs-nav">
+            <button
+                data-tab="videos"
+                class="tab-button inline-flex items-center px-4 py-1.5 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-teal-600 text-teal-800 whitespace-nowrap rounded-t-lg bg-teal-50">
+                <span class="mr-2">📺</span> 歷年課程與講義
+            </button>
+            <button
+                data-tab="external"
+                class="tab-button inline-flex items-center px-4 py-1.5 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-teal-700 hover:border-teal-400 whitespace-nowrap rounded-t-lg">
+                <span class="mr-2">💡</span> 外部案例資源
+            </button>
+        </nav>
+    </div>
+
+    <!-- Tab Content Container -->
+    <div class="p-6 sm:p-8 md:p-10 space-y-10">
+        <!-- 歷年影音課程 -->
+        <div id="videos" class="tab-content">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="section-title text-2xl font-bold text-gray-800">
+                    🎥 歷年課程清單（影音 & 講義）
+                </h2>
+                <span class="hidden sm:inline text-xs text-gray-400">
+                    建議先從「多元品管工具介紹」開始
+                </span>
+            </div>
+            <p class="text-gray-700 mb-6 bg-yellow-50 p-3 border-l-4 border-yellow-400 rounded-lg shadow-sm text-sm sm:text-base leading-relaxed">
+                <span class="inline-flex items-center font-bold text-yellow-700 mr-1">新手小提示：</span>
+                推薦觀看順序為：<span class="font-semibold text-teal-700">「多元品管工具介紹」 → 「問題解決型步驟」 → 「課題達成型步驟」</span>
+            </p>
+            <div id="video-list" class="space-y-4"></div>
+            <p class="mt-4 text-xs text-gray-400">
+                ※ 影片連結為院內訓練平台，需於院內網路環境下使用。
+            </p>
+        </div>
+
+        <!-- 外部資源 -->
+        <div id="external" class="tab-content hidden">
+            <h2 class="section-title text-2xl font-bold text-gray-800 mb-4">
+                🌐 外部高價值參考案例
+            </h2>
+            <p class="text-gray-700 mb-6 text-sm sm:text-base leading-relaxed">
+                參考外部優秀的 QCC / 品質改善案例，可以幫助團隊：
+                <span class="font-semibold text-teal-700">快速找到主題靈感、學習報告架構、掌握評審關注重點</span>。
+            </p>
+
+            <div class="space-y-6">
+                <div class="resource-card p-6 bg-teal-50 rounded-xl border border-teal-300 hover:border-teal-400 shadow-md hover:shadow-xl transition duration-300">
+                    <div class="flex items-center mb-2">
+                        <span class="text-3xl mr-3" role="img" aria-label="Trophy">🏆</span>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-teal-900">醫策會國家醫療品質獎競賽平台（NHQA）</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">適合找靈感：主題方向、創新做法、報告架構</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mt-2 text-sm sm:text-base leading-relaxed">
+                        可參考歷屆競賽外院的
+                        <span class="font-semibold text-indigo-600">「獲獎主題」</span>及
+                        <span class="font-semibold text-indigo-600">「品管改善案摘要」</span>。
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-3 items-center">
+                        <a href="https://nhqa.jct.org.tw/publicUI/A/A102.aspx" target="_blank"
+                           class="inline-flex items-center text-white bg-teal-600 hover:bg-teal-700 px-4 py-1 rounded-xl font-medium text-sm transition duration-150 ease-in-out shadow-md">
+                            前往獲獎主題查詢
+                        </a>
+                        <span class="text-xs text-gray-500">建議：先看與自己科別或主題相近的案例</span>
+                    </div>
+                </div>
+
+                <div class="resource-card p-6 bg-white rounded-xl border border-teal-200 hover:border-teal-400 shadow-md hover:shadow-xl transition duration-300">
+                    <div class="flex items-center mb-2">
+                        <span class="text-3xl mr-3" role="img" aria-label="Book">📚</span>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-teal-900">中衛團結圈電子專輯</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">適合學習：書面報告寫法、簡報排版與故事節奏</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mt-2 text-sm sm:text-base leading-relaxed">
+                        透過 Zinio 電子書平台，參考外院的
+                        <span class="font-semibold text-indigo-600">「品管改善案書面 / 簡報資料」</span>。
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-3 items-center">
+                        <a href="https://tw.zinio.com/" target="_blank"
+                           class="inline-flex items-center text-white bg-teal-600 hover:bg-teal-700 px-4 py-1 rounded-xl font-medium text-sm transition duration-150 ease-in-out shadow-md">
+                            前往 Zinio 平台（需登入）
+                        </a>
+                        <span class="text-xs text-gray-500">小提醒：可搜尋「團結圈」「品管圈」或醫院名稱</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 1. 資料與配置 ---
+    const videoData = [
+        {
+            title: "多元品管工具介紹",
+            consultant: "毛綺如顧問（中衛發展中心）",
+            date: "2018 年 4 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1070418007/20180418.wmv",
+            type: "品管工具基礎",
+            handoutLink: "課程講義/01_【講義】2018.04.18 品質提升活動課程-多元品管工具.pdf",
+        },
+        {
+            title: "問題解決型步驟介紹",
+            consultant: "毛綺如顧問（中衛發展中心）",
+            date: "2018 年 4 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1070418017/107041802.wmv",
+            type: "QCC 實作步驟",
+            handoutLink: "課程講義/02_【講義】2018.04.18 品質提升活動課程-問題解決型步驟介紹.pdf",
+        },
+        {
+            title: "課題達成型步驟介紹",
+            consultant: "毛綺如顧問（中衛發展中心）",
+            date: "2018 年 4 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1070418018/107041803.wmv",
+            type: "QCC 實作步驟",
+            handoutLink: "課程講義/03_【講義】2018.04.18 品質提升活動課程-課題達成型步驟介紹.pdf",
+        },
+        {
+            title: "流程分析、流程改造及精實介紹",
+            consultant: "張國昌顧問（精捷顧問公司）",
+            date: "2019 年 5 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1070523010/107052301.wmv",
+            type: "流程管理",
+            handoutLink: "課程講義/04_【講義】2018.05.23 流程分析、流程改造及精實介紹.pdf",
+        },
+        {
+            title: "HFMEA 及預防型介紹",
+            consultant: "張國昌顧問（精捷顧問公司）",
+            date: "2019 年 5 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1080510007/20190510.wmv",
+            type: "風險管理",
+            handoutLink: "課程講義/05_【講義】2018.05.23 HFMEA及預防型介紹.pdf",
+        },
+        {
+            title: "流程改造步驟介紹",
+            consultant: "張國昌顧問（精捷顧問公司）",
+            date: "2019 年 5 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1080510008/20190510.mp4",
+            type: "流程管理",
+            handoutLink: "課程講義/06_【講義】2019.05.10 流程改造步驟介紹.pdf",
+        },
+        {
+            title: "善用PDCA循環-落實品質改善的核心價值",
+            consultant: "廖熏香顧問（品質管理部）",
+            date: "2025 年 7 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1140724004/PDCA.mp4",
+            type: "PDCA",
+            handoutLink: "課程講義/07_【講義】2025.07.24 善用PDCA循環－落實品質改善的核心價值.pdf",
+        },
+        {
+            title: "RCA 根本原因分析理論與應用（上集）",
+            consultant: "石崇良司長（衛生福利部）",
+            date: "2019 年 7 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1080715002/2019071501.wmv",
+            type: "根本原因分析",
+            handoutLink: "課程講義/08_【講義】2019-1 RCA基本概念-石崇良司長.pdf",
+        },
+        {
+            title: "RCA 根本原因分析理論與應用（下集）",
+            consultant: "石崇良司長（衛生福利部）",
+            date: "2019 年 7 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1080715003/2019071502.wmv",
+            type: "根本原因分析",
+            handoutLink: "課程講義/09_【講義】2019-2 RCA操作-石崇良司長.pdf",
+        }
+    ];
+
+    const repoBase = "/QCC/";
+
+    // --- 2. 輔助函數 ---
+    function toAbsolutePath(path) {
+        const clean = String(path).replace(/^\/+/, "");
+        return repoBase.replace(/\/+$/, "/") + clean;
+    }
+
+    // --- 3. 渲染功能 ---
+    function renderVideos() {
+        const listContainer = document.getElementById('video-list');
+        if (!listContainer) return;
+
+        listContainer.innerHTML = videoData.map((video, index) => {
+            const videoUrl = `video.html?url=${encodeURIComponent(video.link)}`;
+            const handoutHref = encodeURI(toAbsolutePath(video.handoutLink));
+
+            return `
+            <div class="flex flex-col sm:flex-row p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition duration-300 resource-card">
+                <div class="sm:w-3/5">
+                    <span class="inline-flex items-center px-3 py-0.5 text-xs font-semibold rounded-lg bg-teal-100 text-teal-800 mb-1">
+                        ${video.type}
+                    </span>
+                    <h4 class="text-xl font-bold text-gray-800 mt-1">${index + 1}. ${video.title}</h4>
+                    <p class="mt-1 text-sm text-gray-600">${video.consultant} · ${video.date}</p>
+                </div>
+                <div class="sm:w-2/5 mt-4 sm:mt-0 flex flex-col sm:flex-row gap-2 justify-end items-center">
+                    <a href="${videoUrl}" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-1 rounded-xl font-semibold text-sm shadow-md">
+                       觀看影音
+                    </a>
+                    <a href="${handoutHref}" target="_blank" rel="noopener noreferrer"
+                      class="inline-flex items-center text-teal-800 bg-teal-50 border-2 border-teal-700 hover:bg-teal-700 hover:text-white px-4 py-1 rounded-xl font-semibold text-sm shadow-md">
+                      講義下載
+                    </a>
+                </div>
+            </div>
+            `;
+        }).join('');
+    }
+
+    // --- 4. 頁籤切換邏輯 ---
+    function initTabs() {
+        const tabs = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
+
+                // 更新按鈕樣式
+                tabs.forEach(t => {
+                    t.classList.remove('border-teal-600', 'text-teal-800', 'bg-teal-50');
+                    t.classList.add('border-transparent', 'text-gray-500');
+                });
+                tab.classList.add('border-teal-600', 'text-teal-800', 'bg-teal-50');
+                tab.classList.remove('border-transparent', 'text-gray-500');
+
+                // 切換顯示內容
+                contents.forEach(content => {
+                    if (content.id === target) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    }
+
+    // --- 5. 初始化執行 ---
+    window.addEventListener('load', () => {
+        renderVideos();
+        initTabs();
+    });
+</script>
+
+</body>
+</html>
